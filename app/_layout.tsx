@@ -1,15 +1,12 @@
 import React, { useEffect } from "react";
 import { Stack, useRouter, useSegments } from "expo-router";
-import { AuthProvider, useAuth } from "@/src/AuthContext";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { Provider, useSelector } from "react-redux";
+import { store } from "@/src/store";
 import { useColorScheme } from "@/components/useColorScheme";
+import { AppStateProps } from "@/constants/PropTypes";
 
 const StackLayout = () => {
-  const { authState } = useAuth();
+  const authState = useSelector((state: AppStateProps) => state.auth);
   const segments = useSegments();
   const router = useRouter();
 
@@ -22,12 +19,6 @@ const StackLayout = () => {
     } else {
       router.replace("/login");
     }
-
-    // if (!authState?.authenticated && inAuthGroup) {
-    //   router.push("/login");
-    // } else if (!authState?.authenticated === true) {
-    //   router.push("/(protected)");
-    // }
   }, [authState]);
 
   return (
@@ -41,9 +32,9 @@ const StackLayout = () => {
 const RootLayoutNav = () => {
   const colorScheme = useColorScheme();
   return (
-    <AuthProvider>
+    <Provider store={store}>
       <StackLayout />
-    </AuthProvider>
+    </Provider>
   );
 };
 

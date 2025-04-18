@@ -1,14 +1,14 @@
 import { StatusBar } from "expo-status-bar";
 import { Platform, StyleSheet, TouchableOpacity } from "react-native";
 
-import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
-import { useAuth } from "@/src/AuthContext";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "@/src/actions";
 
 export default function LogoutScreen() {
-  const { onLogout } = useAuth();
+  const dispatch = useDispatch();
   const handleLogout = async () => {
-    onLogout!();
+    dispatch(logoutUser());
   };
   return (
     <View style={styles.container}>

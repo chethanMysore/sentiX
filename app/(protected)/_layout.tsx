@@ -1,16 +1,17 @@
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Role } from "@/constants/DefaultValues";
-import { useAuth } from "@/src/AuthContext";
+import { UserRoles } from "@/constants/DefaultValues";
 import { Drawer } from "expo-router/drawer";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { Link } from "expo-router";
 import { Pressable } from "react-native";
+import { useSelector } from "react-redux";
+import { AppStateProps } from "@/constants/PropTypes";
 
 const AppLayout = () => {
-  const { authState } = useAuth();
+  const authState = useSelector((state: AppStateProps) => state.auth);
   const colorScheme = useColorScheme();
 
   return (
@@ -50,7 +51,7 @@ const AppLayout = () => {
               <FontAwesome name="dashboard" color={color} size={size} />
             ),
           }}
-          redirect={authState?.role !== Role.USER}
+          redirect={authState?.role !== UserRoles.USER}
         />
         <Drawer.Screen
           name="admin"
@@ -61,7 +62,7 @@ const AppLayout = () => {
               <FontAwesome name="cog" color={color} size={size} />
             ),
           }}
-          redirect={authState?.role !== Role.ADMIN}
+          redirect={authState?.role !== UserRoles.ADMIN}
         />
       </Drawer>
     </GestureHandlerRootView>

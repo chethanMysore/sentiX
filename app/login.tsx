@@ -1,16 +1,24 @@
 import React, { useState } from "react";
 import { View, Text, TextInput } from "@/components/Themed";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { useAuth } from "@/src/AuthContext";
+import { loginUser } from "@/src/actions";
+import { useDispatch } from "react-redux";
+import { UserRoles } from "@/constants/DefaultValues";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { onLogin } = useAuth();
+  const dispatch = useDispatch();
 
   const handleLogin = async () => {
-    console.log("Chucky inside handleLogin", { username, password });
-    onLogin!(username, password);
+    if (
+      (password === UserRoles.ADMIN || password === UserRoles.USER) &&
+      (username === UserRoles.USER || username === UserRoles.ADMIN)
+    ) {
+      dispatch(loginUser(username, password, username));
+    } else {
+      alert("Invalid Username or password");
+    }
   };
 
   return (
