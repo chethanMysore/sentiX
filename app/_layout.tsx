@@ -11,11 +11,13 @@ const StackLayout = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const inAuthGroup = segments[0] === "(protected)";
+    const inAuthGroup = segments[0] === "register";
     console.log("authState, segments", { authState, segments });
 
     if (!!authState && !!authState.authenticated) {
       router.replace("/(protected)");
+    } else if (inAuthGroup) {
+      router.replace("/register");
     } else {
       router.replace("/login");
     }
@@ -24,6 +26,7 @@ const StackLayout = () => {
   return (
     <Stack>
       <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack.Screen name="register" options={{ headerShown: false }} />
       <Stack.Screen name="(protected)" options={{ headerShown: false }} />
     </Stack>
   );
