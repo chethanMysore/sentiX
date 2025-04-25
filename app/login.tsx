@@ -13,14 +13,14 @@ const LoginPage = () => {
   const dispatch = useDispatch();
 
   const handleLogin = async () => {
-    if (
-      (password === UserRoles.ADMIN || password === UserRoles.USER) &&
-      (username === UserRoles.USER || username === UserRoles.ADMIN)
-    ) {
-      dispatch(loginUser(username, password, username));
-    } else {
-      alert("Invalid Username or password");
-    }
+    // if (
+    //   (password === UserRoles.ADMIN || password === UserRoles.USER) &&
+    //   (username === UserRoles.USER || username === UserRoles.ADMIN)
+    // ) {
+    dispatch(loginUser({ username, password }));
+    // } else {
+    //   alert("Invalid Username or password");
+    // }
   };
 
   return (

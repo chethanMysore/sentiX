@@ -3,7 +3,7 @@ import { Stack, useRouter, useSegments } from "expo-router";
 import { Provider, useSelector } from "react-redux";
 import { store } from "@/src/store";
 import { useColorScheme } from "@/components/useColorScheme";
-import { AppStateProps } from "@/constants/PropTypes";
+import { AppStateProps } from "@/data/PropTypes";
 
 const StackLayout = () => {
   const authState = useSelector((state: AppStateProps) => state.auth);
@@ -14,7 +14,7 @@ const StackLayout = () => {
     const inAuthGroup = segments[0] === "register";
     console.log("authState, segments", { authState, segments });
 
-    if (!!authState && !!authState.authenticated) {
+    if (!!authState && !!authState.isAuthenticated) {
       router.replace("/(protected)");
     } else if (inAuthGroup) {
       router.replace("/register");

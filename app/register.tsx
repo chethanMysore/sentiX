@@ -7,7 +7,7 @@ import {
   initRegistrationValues,
   registrationSchema,
 } from "@/constants/ValidationSchemas";
-import { UserProps } from "@/constants/PropTypes";
+import { UserProps } from "@/data/PropTypes";
 import { Formik } from "formik";
 
 const RegisterPage = () => {

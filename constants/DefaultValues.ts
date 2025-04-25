@@ -1,4 +1,35 @@
-import { CountryProps, NotificationOptionProps } from "@/constants/PropTypes";
+import { CountryProps, NotificationOptionProps } from "@/data/PropTypes";
+// API Base Paths
+export const apiTrainBasePath = "http://127.0.0.1:8000";
+export const apiInferenceBasePath = "http://localhost:8080/api/v1";
+export const homeUrl = "http://localhost:3000";
+
+// Auth Paths
+export const authRegisterPath = "/auth/register";
+export const authLoginPath = "/auth/login";
+export const authTokenPath = "/auth/login";
+export const authLogoutPath = "/auth/logout";
+
+// Data Query Paths
+// Feedbacks
+export const feedbacksDataPath = "/feedbacks/all_feedbacks";
+// Users
+export const usersListPath = "/users";
+export const userByIDPath = "/users/id";
+export const usersByNamePath = "/users/name";
+export const userByUsernamePath = "/users/username";
+export const userRoleByIDPath = "/users/auth/id";
+export const reloadAuthUser = "/users/auth/user";
+// Models
+export const modelsListPath = "/models";
+export const modelByIDPath = "/models/id";
+export const modelsByNamePath = "/models/name";
+export const modelsByUsernamePath = "/models/username";
+
+// Data Creation/Manipulation Paths
+export const userEditByIDPath = "/users/edit";
+export const modelCreatePath = "/models/create";
+export const modelEditPath = "/models/edit";
 
 export enum UserRoles {
   ADMIN = "admin",
@@ -15,15 +46,6 @@ export enum ModelFilterParams {
   MODELID = "id",
   MODELNAME = "name",
   USERNAME = "username",
-}
-
-export enum ErrorCodes {
-  NOT_FOUND = 0,
-  ACCESS_DENIED = 1,
-  INVALID_CREDENTIALS = 2,
-  ERROR_404 = 404,
-  ERROR_401 = 401,
-  ERROR_500 = 500,
 }
 
 export enum NotificationTypes {

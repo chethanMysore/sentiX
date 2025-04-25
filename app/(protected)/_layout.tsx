@@ -8,7 +8,7 @@ import { useColorScheme } from "@/components/useColorScheme";
 import { Link } from "expo-router";
 import { Pressable } from "react-native";
 import { useSelector } from "react-redux";
-import { AppStateProps } from "@/constants/PropTypes";
+import { AppStateProps } from "@/data/PropTypes";
 
 const AppLayout = () => {
   const authState = useSelector((state: AppStateProps) => state.auth);
@@ -40,7 +40,7 @@ const AppLayout = () => {
               </Link>
             ),
           }}
-          redirect={authState?.authenticated === false}
+          redirect={authState?.isAuthenticated === false}
         />
         <Drawer.Screen
           name="dashboard"
