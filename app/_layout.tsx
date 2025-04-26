@@ -1,38 +1,37 @@
 import React, { useEffect } from "react";
 import { Stack, useRouter, useSegments } from "expo-router";
-import { AuthProvider, useAuth } from "@/src/AuthContext";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { Provider, useSelector } from "react-redux";
+import { store } from "@/src/store";
 import { useColorScheme } from "@/components/useColorScheme";
+import { AppStateProps } from "@/data/PropTypes";
+import { Loader } from "@/components/Loader";
 
 const StackLayout = () => {
-  const { authState } = useAuth();
+  const authState = useSelector((state: AppStateProps) => state.auth);
+  const notificationState = useSelector(
+    (state: AppStateProps) => state.notification
+  );
   const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
-    const inAuthGroup = segments[0] === "(protected)";
-    console.log("authState, segments", { authState, segments });
+    const inAuthGroup = segments[0] === "register";
 
-    if (!!authState && !!authState.authenticated) {
+    if (!!authState && !!authState.isAuthenticated) {
       router.replace("/(protected)");
+    } else if (inAuthGroup) {
+      router.replace("/register");
     } else {
       router.replace("/login");
     }
-
-    // if (!authState?.authenticated && inAuthGroup) {
-    //   router.push("/login");
-    // } else if (!authState?.authenticated === true) {
-    //   router.push("/(protected)");
-    // }
   }, [authState]);
 
-  return (
+  return notificationState.showLoader ? (
+    <Loader />
+  ) : (
     <Stack>
       <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack.Screen name="register" options={{ headerShown: false }} />
       <Stack.Screen name="(protected)" options={{ headerShown: false }} />
     </Stack>
   );
@@ -41,9 +40,9 @@ const StackLayout = () => {
 const RootLayoutNav = () => {
   const colorScheme = useColorScheme();
   return (
-    <AuthProvider>
+    <Provider store={store}>
       <StackLayout />
-    </AuthProvider>
+    </Provider>
   );
 };
 
