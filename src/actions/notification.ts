@@ -1,4 +1,8 @@
-import { WRITE_ERROR_MESSAGE } from "@/constants/ActionTypes";
+import {
+  HIDE_LOADER,
+  SHOW_LOADER,
+  WRITE_ERROR_MESSAGE,
+} from "@/constants/ActionTypes";
 import { HANDLE_ERROR } from "@/constants/ActionTypes";
 import { CLEAR_ERRORS } from "@/constants/ActionTypes";
 import {
@@ -42,6 +46,9 @@ export const clearNotifications = (payload: null = null) => ({
 });
 
 export const clearErrors = (payload: null = null) => ({ type: CLEAR_ERRORS });
+
+export const showLoader = (payload: null = null) => ({ type: SHOW_LOADER });
+export const hideLoader = (payload: null = null) => ({ type: HIDE_LOADER });
 
 export const handleError = (payload: ErrorResponse) => ({
   type: HANDLE_ERROR,

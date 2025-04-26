@@ -4,10 +4,12 @@ import { Platform, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "@/components/Themed";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/src/actions";
+import { hideLoader } from "@/src/actions/notification";
 
 export default function LogoutScreen() {
   const dispatch = useDispatch();
   const handleLogout = async () => {
+    dispatch(hideLoader());
     dispatch(logoutUser());
   };
   return (

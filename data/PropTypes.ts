@@ -62,6 +62,9 @@ export type AuthStateProps = {
 
 export type AppStateProps = {
   auth: AuthStateProps;
+  notification: NotificationStateProps;
+  user: UserStateProps;
+  model: ModelStateProps;
 };
 
 export type UserStateProps = {
@@ -81,6 +84,7 @@ export type NotificationStateProps = {
   isError: boolean;
   source: string | null;
   errorMessage: string | null;
+  showLoader: boolean;
 };
 
 export type NotificationActionProps = {
@@ -88,6 +92,21 @@ export type NotificationActionProps = {
   source?: string | null;
   errorMessage?: string | null;
   options?: NotificationOptionProps;
+};
+
+export enum LoaderColors {
+  SUCCESS = "#00ff00",
+  INFO = "#0000ff",
+}
+
+export enum LoaderSize {
+  LARGE = "large",
+  SMALL = "small",
+}
+
+export type LoaderProps = {
+  size?: number | "small" | "large" | undefined;
+  color?: string;
 };
 
 export type ActionPayloadProps =

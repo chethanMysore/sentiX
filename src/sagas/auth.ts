@@ -4,7 +4,11 @@ import {
   logoutUserSuccess,
   registerUserSuccess,
 } from "../actions";
-import { handleError, showSuccessNotification } from "../actions/notification";
+import {
+  handleError,
+  hideLoader,
+  showSuccessNotification,
+} from "../actions/notification";
 import {
   LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
@@ -35,16 +39,17 @@ const execLoginAndLinkSideEffects = function* (
       yield all([
         put(showSuccessNotification({ message: LOGIN_SUCCESS })),
         put(loginUserSuccess(user)),
+        put(hideLoader()),
       ]);
     } else {
       const err = <ErrorResponse>res;
       err.source = "execLoginAndLinkSideEffects -> authApi.authenticateUser";
-      yield put(handleError(err));
+      yield all([put(handleError(err)), put(hideLoader())]);
     }
   } catch (error) {
     const err = <ErrorResponse>error;
     err.source = "execLoginAndLinkSideEffects";
-    yield put(handleError(err));
+    yield all([put(handleError(err)), put(hideLoader())]);
   }
 };
 
@@ -59,16 +64,17 @@ const execRegisterAndLinkSideEffects = function* (newUser: UserProps) {
       yield all([
         put(showSuccessNotification({ message: REGISTRATION_SUCCESS })),
         put(registerUserSuccess(user)),
+        put(hideLoader()),
       ]);
     } else {
       const err = <ErrorResponse>res;
       err.source = "execRegisterAndLinkSideEffects -> authApi.registerNewUser";
-      yield put(handleError(err));
+      yield all([put(handleError(err)), put(hideLoader())]);
     }
   } catch (error) {
     const err = <ErrorResponse>error;
     err.source = "execRegisterAndLinkSideEffects";
-    yield put(handleError(err));
+    yield all([put(handleError(err)), put(hideLoader())]);
   }
 };
 
@@ -79,16 +85,17 @@ const execLogoutAndLinkSideEffects = function* () {
       yield all([
         put(showSuccessNotification({ message: LOGOUT_SUCCESS })),
         put(logoutUserSuccess()),
+        put(hideLoader()),
       ]);
     } else {
       const err = <ErrorResponse>res;
       err.source = "execRegisterAndLinkSideEffects -> authApi.logUserOut";
-      yield put(handleError(err));
+      yield all([put(handleError(err)), put(hideLoader())]);
     }
   } catch (error) {
     const err = <ErrorResponse>error;
     err.source = "execRegisterAndLinkSideEffects";
-    yield put(handleError(err));
+    yield all([put(handleError(err)), put(hideLoader())]);
   }
 };
 

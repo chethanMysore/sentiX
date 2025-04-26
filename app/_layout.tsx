@@ -4,15 +4,18 @@ import { Provider, useSelector } from "react-redux";
 import { store } from "@/src/store";
 import { useColorScheme } from "@/components/useColorScheme";
 import { AppStateProps } from "@/data/PropTypes";
+import { Loader } from "@/components/Loader";
 
 const StackLayout = () => {
   const authState = useSelector((state: AppStateProps) => state.auth);
+  const notificationState = useSelector(
+    (state: AppStateProps) => state.notification
+  );
   const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
     const inAuthGroup = segments[0] === "register";
-    console.log("authState, segments", { authState, segments });
 
     if (!!authState && !!authState.isAuthenticated) {
       router.replace("/(protected)");
@@ -23,7 +26,9 @@ const StackLayout = () => {
     }
   }, [authState]);
 
-  return (
+  return notificationState.showLoader ? (
+    <Loader />
+  ) : (
     <Stack>
       <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen name="register" options={{ headerShown: false }} />

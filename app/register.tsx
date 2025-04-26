@@ -9,20 +9,21 @@ import {
 } from "@/constants/ValidationSchemas";
 import { UserProps } from "@/data/PropTypes";
 import { Formik } from "formik";
+import { showLoader } from "@/src/actions/notification";
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
   const handleRegistration = async (values: any) => {
     let newUser: UserProps = {
-      firstName: values.firstname,
+      firstName: values.firstName,
       lastName: values.lastName,
       emailID: values.emailID,
-      phone: `${values.phoneCode} ${values.phone}`,
+      phone: `${values.phoneCode}${values.phone}`,
       countryCode: values.countryCode,
       username: values.username,
       password: values.password,
     };
-    alert(JSON.stringify(newUser));
+    dispatch(showLoader());
     dispatch(registerUser(newUser));
   };
   return (
@@ -43,7 +44,6 @@ const RegisterPage = () => {
           values,
           errors,
           touched,
-          isValid,
         }) => (
           <>
             <TextInput

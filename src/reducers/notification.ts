@@ -1,4 +1,8 @@
-import { CLEAR_ERRORS } from "@/constants/ActionTypes";
+import {
+  CLEAR_ERRORS,
+  HIDE_LOADER,
+  SHOW_LOADER,
+} from "@/constants/ActionTypes";
 import {
   DISPLAY_ERROR_MESSAGE,
   DISPLAY_INFO_MESSAGE,
@@ -19,6 +23,7 @@ const INIT_STATE = <NotificationStateProps>{
   isError: false,
   source: null,
   errorMessage: null,
+  showLoader: false,
 };
 
 export const notificationReducer = (
@@ -103,6 +108,18 @@ export const notificationReducer = (
         isError: false,
         source: null,
         errorMessage: "",
+      };
+    }
+    case SHOW_LOADER: {
+      return {
+        ...state,
+        showLoader: true,
+      };
+    }
+    case HIDE_LOADER: {
+      return {
+        ...state,
+        showLoader: false,
       };
     }
     default:

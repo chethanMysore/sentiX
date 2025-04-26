@@ -76,3 +76,26 @@ export const registrationSchema = yup.object().shape({
     .oneOf([yup.ref("password"), undefined], "Passwords do not match")
     .required("Please confirm password"),
 });
+
+export const initLoginValues = {
+  username: "",
+  password: "",
+};
+
+export const loginSchema = yup.object().shape({
+  username: yup
+    .string()
+    .matches(
+      usernameRegEx,
+      "Username should contain only alphanumeric characters"
+    )
+    .required(),
+  password: yup
+    .string()
+    .min(8, ({ min }) => `Password must be atleast ${min} characters long`)
+    .max(18, ({ max }) => `Password must be atleast ${max} characters long`)
+    .matches(
+      passwordRegEx,
+      "Password should contain only [alphanumeric, '!', '@', '#','$','%','^','&','*'] characters"
+    ),
+});
