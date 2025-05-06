@@ -8,7 +8,7 @@ import { useColorScheme } from "@/components/useColorScheme";
 import { Link } from "expo-router";
 import { Pressable } from "react-native";
 import { useSelector } from "react-redux";
-import { AppStateProps } from "@/data/PropTypes";
+import { AppStateProps, ModelStateProps } from "@/data/PropTypes";
 
 const AppLayout = () => {
   const authState = useSelector((state: AppStateProps) => state.auth);

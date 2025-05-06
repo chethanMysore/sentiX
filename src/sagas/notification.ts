@@ -12,6 +12,7 @@ import {
 import { ActionProps, ErrorResponse } from "@/data/PropTypes";
 import { all, put, takeLatest } from "redux-saga/effects";
 import {
+  displayErrorPage,
   showErrorNotification,
   showWarningNotification,
 } from "../actions/notification";
@@ -34,17 +35,24 @@ const handleErrorSideEffects = function* (err: ErrorResponse) {
             put(showErrorNotification({ message: INVALID_CREDENTIALS })),
           ]);
         } else {
-          yield all([put(showErrorNotification({ message: SESSION_EXPIRED }))]);
+          yield all([
+            put(showErrorNotification({ message: SESSION_EXPIRED })),
+            put(displayErrorPage({ ...err })),
+          ]);
         }
         break;
       }
       default:
-        yield all([put(showWarningNotification({ message: err.message }))]);
+        yield all([
+          put(showWarningNotification({ message: err.message })),
+          put(displayErrorPage({ ...err })),
+        ]);
     }
   } else {
-    yield put(
-      showErrorNotification({ message: err.message, source: err.source })
-    );
+    yield all([
+      put(showErrorNotification({ message: err.message, source: err.source })),
+      put(displayErrorPage({ ...err })),
+    ]);
   }
 };
 

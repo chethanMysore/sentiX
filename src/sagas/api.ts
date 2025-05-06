@@ -1,6 +1,7 @@
 import {
   ActionPayloadProps,
   ActionProps,
+  ApiError,
   ErrorResponse,
   ModelAPI,
   ModelProps,
@@ -41,7 +42,7 @@ const execAndLinkSideEffects = function* (
       api[apiFnName],
       fnPayload
     );
-    if (!!(res as ErrorResponse)) {
+    if (!!res && (<ErrorResponse>res).isError) {
       const err = <ErrorResponse>res;
       err.source = `execAndLinkSideEffects -> ${typeof api}.${apiFnName}`;
       yield put(handleError(err));

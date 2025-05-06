@@ -41,24 +41,19 @@ export const authApi = <AuthAPI>{
             )
             .then((res) => {
               const user = (<APIData>(<ServerData>res)).user;
+              const role = (<APIData>(<ServerData>res)).role;
               if (user) {
-                apiCalls
-                  .fetchData(
-                    apiInferenceBasePath,
-                    userRoleByIDPath,
-                    true,
-                    user.userID
-                  )
-                  .then((role) => {
-                    user.role = <string>role;
-                    resolve(user);
-                  })
-                  .catch((err: ErrorResponse) => {
-                    err.isError = true;
-                    err.message = USER_ROLE_NOT_DEFINED;
-                    err.status = ErrorCodes.ERROR_UNAUTHORIZED;
-                    reject(err);
-                  });
+                if (!!role && role != "") {
+                  user.role = role;
+                  resolve(user);
+                } else {
+                  let err = <ApiError>{
+                    isError: true,
+                    message: USER_ROLE_NOT_DEFINED,
+                    status: ErrorCodes.ERROR_UNAUTHORIZED,
+                  };
+                  reject(err);
+                }
               } else {
                 let err = <ApiError>{
                   isError: true,
@@ -67,6 +62,9 @@ export const authApi = <AuthAPI>{
                 };
                 reject(err);
               }
+            })
+            .catch((err) => {
+              (err.isError = true), reject(err);
             });
         })
         .catch((err) => {

@@ -94,16 +94,6 @@ export type NotificationActionProps = {
   options?: NotificationOptionProps;
 };
 
-export enum LoaderColors {
-  SUCCESS = "#00ff00",
-  INFO = "#0000ff",
-}
-
-export enum LoaderSize {
-  LARGE = "large",
-  SMALL = "small",
-}
-
 export type LoaderProps = {
   size?: number | "small" | "large" | undefined;
   color?: string;
@@ -149,6 +139,7 @@ export type APIData = {
   models?: ModelProps[];
   user?: UserProps;
   model?: ModelProps;
+  role?: string;
 };
 
 export type ServerData = string | APIData;

@@ -14,14 +14,14 @@ export const authLogoutPath = "/auth/logout";
 // Feedbacks
 export const feedbacksDataPath = "/feedbacks/all_feedbacks";
 // Users
-export const usersListPath = "/users";
+export const usersListPath = "/users/all";
 export const userByIDPath = "/users/id";
 export const usersByNamePath = "/users/name";
 export const userByUsernamePath = "/users/username";
 export const userRoleByIDPath = "/users/auth/id";
 export const reloadAuthUser = "/users/auth/user";
 // Models
-export const modelsListPath = "/models";
+export const modelsListPath = "/models/all";
 export const modelByIDPath = "/models/id";
 export const modelsByNamePath = "/models/name";
 export const modelsByUsernamePath = "/models/username";
@@ -87,3 +87,13 @@ export const CountryNameAndCodeList = <CountryProps[]>[
   { code: "IN", name: "India" },
   { code: "DE", name: "Germany" },
 ];
+
+export enum LoaderColors {
+  SUCCESS = "#00ff00",
+  INFO = "#0000ff",
+}
+
+export enum LoaderSize {
+  LARGE = "large",
+  SMALL = "small",
+}

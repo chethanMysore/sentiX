@@ -1,6 +1,11 @@
 import React, { FormEvent } from "react";
-import { View, Text, TextInput } from "@/components/Themed";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from "@/components/Themed-Paper";
+import { StyleSheet } from "react-native";
 import { registerUser } from "@/src/actions";
 import { useDispatch } from "react-redux";
 import {
@@ -151,17 +156,17 @@ const RegisterPage = () => {
               <Text style={styles.errorText}>{errors.retypePassword}</Text>
             )}
             <TouchableOpacity
-              style={
-                Object.keys(errors).length == 0 &&
-                Object.keys(touched).length ==
-                  Object.keys(initRegistrationValues).length
-                  ? styles.button
-                  : styles.buttonDisabled
-              }
+              style={styles.button}
               onPress={(e) =>
                 handleSubmit(e as unknown as FormEvent<HTMLFormElement>)
               }
-              disabled={!(Object.keys(errors).length == 0)}
+              disabled={
+                !(
+                  Object.keys(errors).length == 0 &&
+                  Object.keys(touched).length ==
+                    Object.keys(initRegistrationValues).length
+                )
+              }
             >
               <Text style={{ color: "#fff" }}>Register</Text>
             </TouchableOpacity>
@@ -208,14 +213,6 @@ const styles = StyleSheet.create({
   button: {
     marginVertical: 15,
     alignItems: "center",
-    backgroundColor: "#111233",
-    padding: 12,
-    borderRadius: 4,
-  },
-  buttonDisabled: {
-    marginVertical: 15,
-    alignItems: "center",
-    backgroundColor: "#787775",
     padding: 12,
     borderRadius: 4,
   },

@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { Provider, useSelector } from "react-redux";
+import { PaperProvider } from "react-native-paper";
 import { store } from "@/src/store";
 import { useColorScheme } from "@/components/useColorScheme";
 import { AppStateProps } from "@/data/PropTypes";
 import { Loader } from "@/components/Loader";
+import { theme } from "@/constants/AppTheme";
+import ErrorBoundary from "./ErrorBoundary";
 
 const StackLayout = () => {
   const authState = useSelector((state: AppStateProps) => state.auth);
@@ -39,9 +42,14 @@ const StackLayout = () => {
 
 const RootLayoutNav = () => {
   const colorScheme = useColorScheme();
+
   return (
     <Provider store={store}>
-      <StackLayout />
+      <PaperProvider theme={theme}>
+        <ErrorBoundary>
+          <StackLayout />
+        </ErrorBoundary>
+      </PaperProvider>
     </Provider>
   );
 };

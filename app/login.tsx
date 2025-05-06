@@ -1,6 +1,11 @@
 import React, { FormEvent } from "react";
-import { View, Text, TextInput } from "@/components/Themed";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from "@/components/Themed-Paper";
+import { StyleSheet } from "react-native";
 import { loginUser } from "@/src/actions";
 import { useDispatch } from "react-redux";
 import Colors from "@/constants/Colors";
@@ -63,25 +68,25 @@ const LoginPage = () => {
               <Text style={styles.errorText}>{errors.password}</Text>
             )}
             <TouchableOpacity
-              style={
-                Object.keys(errors).length == 0 &&
-                Object.keys(touched).length ==
-                  Object.keys(initLoginValues).length
-                  ? styles.button
-                  : styles.buttonDisabled
+              style={styles.button}
+              disabled={
+                !(
+                  Object.keys(errors).length == 0 &&
+                  Object.keys(touched).length ==
+                    Object.keys(initLoginValues).length
+                )
               }
               onPress={(e) =>
                 handleSubmit(e as unknown as FormEvent<HTMLFormElement>)
               }
-              disabled={!(Object.keys(errors).length == 0)}
             >
-              <Text style={{ color: "#fff" }}>Register</Text>
+              <Text style={{ color: "#fff" }}>Login</Text>
             </TouchableOpacity>
           </>
         )}
       </Formik>
       <Link href="/register" style={styles.helpLink}>
-        <Text style={styles.helpLinkText} lightColor={Colors.light.tint}>
+        <Text style={styles.helpLinkText} isLink>
           New to SentiX? Register Now!
         </Text>
       </Link>
@@ -128,14 +133,6 @@ const styles = StyleSheet.create({
   button: {
     marginVertical: 15,
     alignItems: "center",
-    backgroundColor: "#111233",
-    padding: 12,
-    borderRadius: 4,
-  },
-  buttonDisabled: {
-    marginVertical: 15,
-    alignItems: "center",
-    backgroundColor: "#787775",
     padding: 12,
     borderRadius: 4,
   },

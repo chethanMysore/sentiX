@@ -1,6 +1,8 @@
-import { LoaderColors, LoaderProps, LoaderSize } from "@/data/PropTypes";
+import { LoaderProps } from "@/data/PropTypes";
+import { LoaderColors, LoaderSize } from "@/constants/DefaultValues";
 import React from "react";
-import { ActivityIndicator, StyleSheet } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
+import { StyleSheet } from "react-native";
 import { View } from "./Themed";
 
 export const Loader = (props: LoaderProps) => (

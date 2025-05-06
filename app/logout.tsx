@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
-import { Platform, StyleSheet, TouchableOpacity } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
-import { Text, View } from "@/components/Themed";
+import { Text, View, TouchableOpacity } from "@/components/Themed-Paper";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/src/actions";
 import { hideLoader } from "@/src/actions/notification";
@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
   button: {
     marginVertical: 15,
     alignItems: "center",
-    backgroundColor: "#111233",
     padding: 12,
     borderRadius: 4,
   },
