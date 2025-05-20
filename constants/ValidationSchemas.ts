@@ -1,3 +1,4 @@
+import { UserProps } from "@/data/PropTypes";
 import * as yup from "yup";
 
 const phoneReqEx = /^[0-9]{10}$/i;
@@ -100,6 +101,49 @@ export const loginSchema = yup.object().shape({
       passwordRegEx,
       "Password should contain only [alphanumeric, '!', '@', '#','$','%','^','&','*'] characters"
     ),
+});
+
+export const iniUserUpdateValues = {
+  firstName: "",
+  lastName: "",
+  emailID: "",
+  phone: "",
+  countryCode: "",
+};
+
+export const userUpdateSchema = yup.object().shape({
+  firstName: yup
+    .string()
+    .min(2, ({ min }) => `First Name must be atleast ${min} characters long`)
+    .max(18, ({ max }) => `First Name must be atleast ${max} characters long`)
+    .matches(nameRegEx, "First Name should contain only alphabets")
+    .required("First Name is Required"),
+  lastName: yup
+    .string()
+    .min(2, ({ min }) => `Last Name must be atleast ${min} characters long`)
+    .max(18, ({ max }) => `Last Name must be atleast ${max} characters long`)
+    .matches(nameRegEx, "Last Name should contain only alphabets")
+    .required("Last Name is Required"),
+  emailID: yup
+    .string()
+    .email("Please enter valid email")
+    .required("Email Address is Required"),
+  phone: yup
+    .string()
+    .matches(phoneReqEx, "Phone number is invalid")
+    .required("Phone Number is Required"),
+  // phoneCode: yup
+  //   .string()
+  //   .matches(phoneCodeRegEx, "Phone Code is invalid")
+  //   .required("Select Country Code"),
+  countryCode: yup
+    .string()
+    .matches(countryCodeRegEx, "Country Code is invalid")
+    .required("Select a country"),
+  // countryName: yup
+  //   .string()
+  //   // .matches(countryNameRegEx, "Country Name is invalid")
+  //   .required("Select a country"),
 });
 
 export const initModelUpdateValues = {

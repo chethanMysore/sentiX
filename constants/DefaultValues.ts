@@ -86,6 +86,7 @@ export const CountryNameAndCodeList = <CountryProps[]>[
   { code: "US", name: "United Stated" },
   { code: "IN", name: "India" },
   { code: "DE", name: "Germany" },
+  { code: "AU", name: "Australia" },
 ];
 
 export enum LoaderColors {
@@ -97,3 +98,19 @@ export enum LoaderSize {
   LARGE = "large",
   SMALL = "small",
 }
+
+export const DeviceSizes = {
+  xtraLarge: { maxWidth: 4000, minWidth: 2001 },
+  large: {
+    maxWidth: 2000,
+    minWidth: 1368,
+  },
+  medium: {
+    maxWidth: 1367,
+    minWidth: 1080,
+  },
+  small: {
+    maxWidth: 1079,
+    minWidth: 565,
+  },
+};

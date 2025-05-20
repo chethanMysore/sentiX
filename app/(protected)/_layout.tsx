@@ -20,10 +20,10 @@ const AppLayout = () => {
         <Drawer.Screen
           name="index"
           options={{
-            headerTitle: "Home",
-            drawerLabel: "Home",
+            headerTitle: "Dashboard",
+            drawerLabel: "Dashboard",
             drawerIcon: ({ size, color }) => (
-              <FontAwesome name="home" color={color} size={size} />
+              <FontAwesome name="dashboard" color={color} size={size} />
             ),
             headerRight: () => (
               <Link href="/logout" asChild>
@@ -43,15 +43,15 @@ const AppLayout = () => {
           redirect={authState?.isAuthenticated === false}
         />
         <Drawer.Screen
-          name="dashboard"
+          name="profile"
           options={{
-            headerTitle: "Dashboard",
-            drawerLabel: "Dashboard",
+            headerTitle: "My Profile",
+            drawerLabel: "Profile",
             drawerIcon: ({ size, color }) => (
-              <FontAwesome name="dashboard" color={color} size={size} />
+              <FontAwesome name="user" color={color} size={size} />
             ),
           }}
-          redirect={authState?.role !== UserRoles.USER}
+          redirect={authState?.isAuthenticated === false}
         />
         <Drawer.Screen
           name="admin"
