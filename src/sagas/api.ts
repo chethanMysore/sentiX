@@ -8,8 +8,8 @@ import {
   UserAPI,
   UserProps,
 } from "@/data/PropTypes";
-import { call, put, takeLatest } from "redux-saga/effects";
-import { handleError } from "../actions/notification";
+import { all, call, put, takeLatest } from "redux-saga/effects";
+import { handleError, hideLoader } from "../actions/notification";
 import {
   CREATE_MODEL,
   FETCH_ALL_MODELS,
@@ -47,10 +47,13 @@ const execAndLinkSideEffects = function* (
       err.source = `execAndLinkSideEffects -> ${typeof api}.${apiFnName}`;
       yield put(handleError(err));
     } else {
-      yield put({
-        type: successActionType,
-        payload: res as UserProps | ModelProps,
-      });
+      yield all([
+        put({
+          type: successActionType,
+          payload: res as UserProps | ModelProps,
+        }),
+        put(hideLoader()),
+      ]);
     }
   } catch (error) {
     const err = <ErrorResponse>error;

@@ -21,6 +21,7 @@ type ThemeProps = {
   darkColor?: string;
   disabled?: boolean;
   isLink?: boolean;
+  buttonColor?: string;
 };
 
 export type TextProps = ThemeProps & DefaultText["props"];
@@ -72,11 +73,18 @@ export function View(props: ViewProps) {
 
 export function TextInput(props: TextInputProps) {
   const theme = useAppTheme();
-  const { style, lightColor, darkColor, ...otherProps } = props;
+  const { style, lightColor, darkColor, disabled, ...otherProps } = props;
 
   return (
     <DefaultTextInput
-      style={[{ backgroundColor: theme.colors.secondaryContainer }, style]}
+      style={[
+        {
+          backgroundColor: disabled
+            ? theme.colors.secondaryContainer
+            : theme.colors.plainContainer,
+        },
+        style,
+      ]}
       {...otherProps}
     />
   );
@@ -84,15 +92,16 @@ export function TextInput(props: TextInputProps) {
 
 export function TouchableOpacity(props: ButtonProps) {
   const theme = useAppTheme();
-  const { style, disabled, ...otherProps } = props;
+  const { style, disabled, buttonColor, ...otherProps } = props;
   return (
     <DefaultTouchableOpacity
       style={[
         {
           backgroundColor:
-            !!disabled && disabled
+            buttonColor ??
+            (!!disabled && disabled
               ? theme.colors.outline
-              : theme.colors.primary,
+              : theme.colors.primary),
         },
         style,
       ]}

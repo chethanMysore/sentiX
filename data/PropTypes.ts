@@ -4,6 +4,7 @@ import {
   UserRoles,
 } from "@/constants/DefaultValues";
 import { AxiosResponse, AxiosError, AxiosHeaders } from "axios";
+import { ModalProps } from "react-native-paper";
 
 export interface AuthProps {
   authState: {
@@ -31,11 +32,11 @@ export type UserProps = {
 };
 
 export type ModelProps = {
-  modelID: string;
-  modelName: string;
-  createdBy: string;
-  createdAt: string;
-  modifiedAt: string;
+  modelID?: string;
+  modelName?: string;
+  createdBy?: string;
+  createdAt?: string;
+  modifiedAt?: string;
 };
 
 export type NotificationOptionProps = {
@@ -97,6 +98,11 @@ export type NotificationActionProps = {
 export type LoaderProps = {
   size?: number | "small" | "large" | undefined;
   color?: string;
+};
+
+export type ModalComponentProps = {
+  selectedModel: ModelProps | null;
+  setModalVisible: (modalVisible: React.SetStateAction<boolean>) => void;
 };
 
 export type ActionPayloadProps =

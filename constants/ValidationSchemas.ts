@@ -8,6 +8,8 @@ const countryNameRegEx = /^[A-Z\s]{3, 18}$/i;
 const usernameRegEx = /^[A-Z0-9]{5,18}$/i;
 const passwordRegEx = /^[A-Z0-9._@*!#$%^&]{8,18}$/i;
 
+const modelNameRegEx = /^[A-Z0-9._#]{2,18}$/i;
+
 export const initRegistrationValues = {
   emailID: "",
   firstName: "",
@@ -97,5 +99,20 @@ export const loginSchema = yup.object().shape({
     .matches(
       passwordRegEx,
       "Password should contain only [alphanumeric, '!', '@', '#','$','%','^','&','*'] characters"
+    ),
+});
+
+export const initModelUpdateValues = {
+  modelName: "",
+};
+
+export const modelUpdateSchema = yup.object().shape({
+  modelName: yup
+    .string()
+    .min(2, ({ min }) => `Model name must be atleast ${min} characters long`)
+    .max(18, ({ max }) => `Model name must be atmost ${max} characters long`)
+    .matches(
+      modelNameRegEx,
+      "Model name should contain only [alphanumeric, '#', '_'] characters"
     ),
 });

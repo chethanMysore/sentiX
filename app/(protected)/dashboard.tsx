@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Modal, Alert } from "react-native";
 
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
@@ -10,6 +10,7 @@ import { fetchAllModels } from "@/src/actions/model";
 
 export default function DashboardScreen() {
   const modelState = useSelector((state: AppStateProps) => state.model);
+  const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     if (modelState.modelsList.length == 0) {
@@ -19,6 +20,7 @@ export default function DashboardScreen() {
   return (
     <View style={styles.container}>
       <Text>Subscribed Models</Text>
+
       <ModelList modelsList={modelState.modelsList} selectedModel={null} />
     </View>
   );
