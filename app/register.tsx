@@ -4,6 +4,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Dropdown,
 } from "@/components/Themed-Paper";
 import { ScrollView, StyleSheet } from "react-native";
 import { registerUser } from "@/src/actions";
@@ -18,10 +19,20 @@ import { showLoader } from "@/src/actions/notification";
 import { isLargeDevice, isMediumDevice } from "@/src/util";
 import { Card } from "react-native-paper";
 import { theme } from "@/constants/AppTheme";
+import { countryAttributes } from "@/assets/countryCodes";
 
 const RegisterPage = () => {
   const isLargeScreen = isLargeDevice();
   const isMediumScreen = isMediumDevice();
+  const phoneCodes = [
+    ...new Set(countryAttributes.map((country) => country.e164_country_code)),
+  ].map((code) => ({ label: code, value: code }));
+  const countryCodes = [
+    ...new Set(countryAttributes.map((country) => country.code)),
+  ].map((code) => ({ label: code, value: code }));
+  const countryNames = [
+    ...new Set(countryAttributes.map((country) => country.name)),
+  ].map((code) => ({ label: code, value: code }));
   const dispatch = useDispatch();
   const handleRegistration = async (values: any) => {
     let newUser: UserProps = {
@@ -35,6 +46,7 @@ const RegisterPage = () => {
     };
     dispatch(showLoader());
     dispatch(registerUser(newUser));
+    // console.log(values);
   };
   return (
     <View style={styles.container}>
@@ -103,12 +115,24 @@ const RegisterPage = () => {
                   {touched.lastName && errors.lastName && (
                     <Text style={styles.errorText}>{errors.lastName}</Text>
                   )}
-                  <TextInput
+                  {/* <TextInput
                     placeholder="Phone Code*"
                     style={styles.inputField}
                     onChangeText={handleChange("phoneCode")}
                     onBlur={handleBlur("phoneCode")}
                     value={values.phoneCode}
+                  />
+                  {touched.phoneCode && errors.phoneCode && (
+                    <Text style={styles.errorText}>{errors.phoneCode}</Text>
+                  )} */}
+                  <Dropdown
+                    label="Phone Code*"
+                    placeholder="Select Dial Code"
+                    options={phoneCodes}
+                    value={values.phoneCode}
+                    onSelect={(value) => {
+                      handleChange("phoneCode")(value!);
+                    }}
                   />
                   {touched.phoneCode && errors.phoneCode && (
                     <Text style={styles.errorText}>{errors.phoneCode}</Text>
@@ -123,7 +147,19 @@ const RegisterPage = () => {
                   {touched.phone && errors.phone && (
                     <Text style={styles.errorText}>{errors.phone}</Text>
                   )}
-                  <TextInput
+                  <Dropdown
+                    label="Country Code*"
+                    placeholder="Select Dial Code"
+                    options={countryCodes}
+                    value={values.countryCode}
+                    onSelect={(value) => {
+                      handleChange("countryCode")(value!);
+                    }}
+                  />
+                  {touched.countryCode && errors.countryCode && (
+                    <Text style={styles.errorText}>{errors.countryCode}</Text>
+                  )}
+                  {/* <TextInput
                     placeholder="Country Code*"
                     style={styles.inputField}
                     onChangeText={handleChange("countryCode")}
@@ -132,8 +168,20 @@ const RegisterPage = () => {
                   />
                   {touched.countryCode && errors.countryCode && (
                     <Text style={styles.errorText}>{errors.countryCode}</Text>
+                  )} */}
+                  <Dropdown
+                    label="Country Name*"
+                    placeholder="Select Dial Code"
+                    options={countryNames}
+                    value={values.countryName}
+                    onSelect={(value) => {
+                      handleChange("countryName")(value!);
+                    }}
+                  />
+                  {touched.countryName && errors.countryName && (
+                    <Text style={styles.errorText}>{errors.countryName}</Text>
                   )}
-                  <TextInput
+                  {/* <TextInput
                     placeholder="Country Name*"
                     style={styles.inputField}
                     onChangeText={handleChange("countryName")}
@@ -142,7 +190,7 @@ const RegisterPage = () => {
                   />
                   {touched.countryName && errors.countryName && (
                     <Text style={styles.errorText}>{errors.countryName}</Text>
-                  )}
+                  )} */}
                   <TextInput
                     placeholder="Username*"
                     style={styles.inputField}
@@ -229,7 +277,7 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   largeDeviceContainer: {
-    margin: "35%",
+    margin: "30%",
     minHeight: "80%",
   },
   mediumDeviceContainer: {
@@ -267,6 +315,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 4,
     padding: 10,
+    fontSize: 16,
   },
   button: {
     marginVertical: 15,

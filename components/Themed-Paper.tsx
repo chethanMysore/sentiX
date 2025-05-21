@@ -3,18 +3,32 @@
  * https://docs.expo.io/guides/color-schemes/
  */
 
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Text as DefaultText,
   View as DefaultView,
   TextInput as DefaultTextInput,
   TouchableOpacity as DefaultTouchableOpacity,
   TouchableOpacityProps,
+  ViewStyle,
 } from "react-native";
 
+import {
+  Dropdown as DefaultDropdown,
+  DropdownProps,
+  DropdownItemProps,
+  DropdownInputProps,
+} from "react-native-paper-dropdown";
+
+import {
+  TextInput as PaperTextInput,
+  Text as PaperText,
+} from "react-native-paper";
+
 import Colors from "@/constants/Colors";
-import { useAppTheme } from "@/constants/AppTheme";
+import { theme, useAppTheme } from "@/constants/AppTheme";
 import { useColorScheme } from "./useColorScheme";
+import { Divider, TouchableRipple } from "react-native-paper";
 
 type ThemeProps = {
   lightColor?: string;
@@ -106,6 +120,99 @@ export function TouchableOpacity(props: ButtonProps) {
         style,
       ]}
       {...otherProps}
+    />
+  );
+}
+
+const CustomDropdownItem = ({
+  width,
+  option,
+  value,
+  onSelect,
+  toggleMenu,
+  isLast,
+}: DropdownItemProps) => {
+  const style: ViewStyle = useMemo(
+    () => ({
+      backgroundColor: theme.colors.plainContainer,
+      justifyContent: "center",
+    }),
+    [option.value, value]
+  );
+  return (
+    <>
+      <TouchableRipple
+        onPress={() => {
+          onSelect?.(option.value);
+          toggleMenu();
+        }}
+        style={style}
+      >
+        <PaperText
+          style={{
+            backgroundColor: theme.colors.plainContainer,
+            // marginVertical: 4,
+            height: 50,
+            borderWidth: 1,
+            borderColor: "#ccc",
+            borderRadius: 4,
+            padding: 10,
+            verticalAlign: "middle",
+            textAlignVertical: "center",
+          }}
+        >
+          {option.label}
+        </PaperText>
+      </TouchableRipple>
+      {/* {!isLast && <Divider />} */}
+    </>
+  );
+};
+
+const CustomDropdownInput = ({
+  placeholder,
+  selectedLabel,
+  rightIcon,
+  label,
+}: DropdownInputProps) => (
+  <>
+    <PaperTextInput
+      // mode="outlined"
+      label={label}
+      placeholder={placeholder}
+      value={selectedLabel}
+      style={{
+        backgroundColor: theme.colors.plainContainer,
+        marginVertical: 4,
+        height: 50,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 4,
+        // padding: 10,
+        fontSize: 16,
+      }}
+      right={rightIcon}
+    />
+  </>
+);
+
+export function Dropdown(props: DropdownProps) {
+  const { label, placeholder, options, value, onSelect } = props;
+  return (
+    <DefaultDropdown
+      label={label}
+      placeholder={placeholder}
+      options={options}
+      value={value}
+      onSelect={onSelect}
+      menuContentStyle={{ backgroundColor: theme.colors.plainContainer }}
+      menuUpIcon={<PaperTextInput.Icon icon="menu-up" pointerEvents="none" />}
+      menuDownIcon={
+        <PaperTextInput.Icon icon="menu-down" pointerEvents="none" />
+      }
+      CustomDropdownInput={CustomDropdownInput}
+      CustomDropdownItem={CustomDropdownItem}
+      hideMenuHeader
     />
   );
 }

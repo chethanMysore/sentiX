@@ -55,6 +55,14 @@ export type CountryProps = {
   name: string;
 };
 
+export type CountryAttributeProps = {
+  name: string;
+  code: string;
+  emoji: string;
+  e164_country_code: string;
+  slug: string;
+};
+
 export type AuthStateProps = {
   authUser: UserProps | null;
   isAuthenticated: boolean;

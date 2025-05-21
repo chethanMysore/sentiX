@@ -3,7 +3,7 @@ import * as yup from "yup";
 
 const phoneReqEx = /^[0-9]{10}$/i;
 const nameRegEx = /^[A-Z]{2,18}$/i;
-const phoneCodeRegEx = /^\+[0-9]{1,2}$/i;
+const phoneCodeRegEx = /^\+[0-9]{1,3}$/i;
 const countryCodeRegEx = /^[A-Z]{2}$/i;
 const countryNameRegEx = /^[A-Z\s]{3, 18}$/i;
 const usernameRegEx = /^[A-Z0-9]{5,18}$/i;
