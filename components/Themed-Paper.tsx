@@ -11,6 +11,9 @@ import {
   TouchableOpacity as DefaultTouchableOpacity,
   TouchableOpacityProps,
   ViewStyle,
+  NativeSyntheticEvent,
+  TextInputKeyPressEventData,
+  TextInputChangeEventData,
 } from "react-native";
 
 import {
@@ -18,6 +21,7 @@ import {
   DropdownProps,
   DropdownItemProps,
   DropdownInputProps,
+  DropdownInput,
 } from "react-native-paper-dropdown";
 
 import {

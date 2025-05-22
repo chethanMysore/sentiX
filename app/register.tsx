@@ -131,6 +131,7 @@ const RegisterPage = () => {
                     options={phoneCodes}
                     value={values.phoneCode}
                     onSelect={(value) => {
+                      setFieldTouched("phoneCode", true, true);
                       handleChange("phoneCode")(value!);
                     }}
                   />
@@ -149,10 +150,11 @@ const RegisterPage = () => {
                   )}
                   <Dropdown
                     label="Country Code*"
-                    placeholder="Select Dial Code"
+                    placeholder="Select Country Code"
                     options={countryCodes}
                     value={values.countryCode}
                     onSelect={(value) => {
+                      setFieldTouched("countryCode", true, true);
                       handleChange("countryCode")(value!);
                     }}
                   />
@@ -171,10 +173,11 @@ const RegisterPage = () => {
                   )} */}
                   <Dropdown
                     label="Country Name*"
-                    placeholder="Select Dial Code"
+                    placeholder="Select Country Name"
                     options={countryNames}
                     value={values.countryName}
                     onSelect={(value) => {
+                      setFieldTouched("countryName", true, true);
                       handleChange("countryName")(value!);
                     }}
                   />
@@ -218,6 +221,9 @@ const RegisterPage = () => {
                     onChangeText={handleChange("retypePassword")}
                     onBlur={handleBlur("retypePassword")}
                     onKeyPress={() =>
+                      setFieldTouched("retypePassword", true, true)
+                    }
+                    onChange={() =>
                       setFieldTouched("retypePassword", true, true)
                     }
                     value={values.retypePassword}

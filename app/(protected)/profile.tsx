@@ -42,7 +42,7 @@ export default function ProfileScreen() {
   return (
     <Card style={styles.centeredView}>
       {/* <ScrollView> */}
-      <View style={{ width: "100%", flex: 1 }}>
+      <View style={{ width: "100%", height: "100%" }}>
         {showUpdateForm ? (
           <Text style={styles.title}>Update My Details</Text>
         ) : (
@@ -322,6 +322,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     zIndex: 1000,
+    minHeight: "50%",
   },
   button: {
     borderRadius: 20,

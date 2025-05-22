@@ -80,9 +80,8 @@ const LoginPage = () => {
                   style={styles.inputField}
                   onChangeText={handleChange("password")}
                   onBlur={handleBlur("password")}
-                  onKeyPress={() =>
-                    setFieldTouched("retypePassword", true, true)
-                  }
+                  onKeyPress={() => setFieldTouched("password", true, true)}
+                  onChange={() => setFieldTouched("password", true, true)}
                   value={values.password}
                   secureTextEntry
                 />

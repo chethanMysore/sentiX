@@ -40,3 +40,6 @@ yarn-error.*
 
 # es-lint
 eslint.config.mjs
+
+# builds
+android/
