@@ -108,6 +108,10 @@ export type LoaderProps = {
   color?: string;
 };
 
+export type DataPaginationProps = {
+  numItemsPerPage: number[];
+};
+
 export type ModalComponentProps = {
   selectedModel: ModelProps | null;
   setModalVisible: (modalVisible: React.SetStateAction<boolean>) => void;

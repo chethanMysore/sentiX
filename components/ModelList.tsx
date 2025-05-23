@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { ModelProps, ModelStateProps } from "@/data/PropTypes";
-import { Card, Text, Button, Portal, Modal } from "react-native-paper";
+import {
+  Card,
+  Text,
+  Button,
+  Portal,
+  Modal,
+  DataTable,
+} from "react-native-paper";
 import {
   ScrollView,
   StyleSheet,
@@ -10,14 +17,36 @@ import {
 } from "react-native";
 import { ModelDetails } from "./ModelDetails";
 import { View } from "./Themed-Paper";
+import { getLocaleDateTime } from "@/src/util/dateTimeUtil";
+import { DataTablePagination } from "@/constants/DefaultValues";
+import { isLargeDevice, isMediumDevice } from "@/src/util";
 
 export const ModelList = (props: ModelStateProps) => {
+  const isLargeScreen = isLargeDevice();
+  const isMediumScreen = isMediumDevice();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedModel, setSelectedModel] = useState<ModelProps>({});
   const handleShowDetails = (model: ModelProps) => {
     setSelectedModel(model);
     setModalVisible(true);
   };
+  const [page, setPage] = React.useState<number>(0);
+  const numItemsPerPage =
+    props.modelsList && props.modelsList.length > 0
+      ? [
+          ...DataTablePagination.numItemsPerPage.filter(
+            (num) => num < props.modelsList.length
+          ),
+          props.modelsList.length,
+        ]
+      : DataTablePagination.numItemsPerPage;
+  const [itemsPerPage, onItemsPerPageChange] = React.useState(
+    numItemsPerPage[0]
+  );
+
+  const from = page * itemsPerPage;
+  const to = Math.min((page + 1) * itemsPerPage, props.modelsList.length);
+
   return !!props.modelsList && props.modelsList.length > 0 ? (
     <>
       <Portal>
@@ -34,20 +63,114 @@ export const ModelList = (props: ModelStateProps) => {
           </TouchableOpacity>
         </Modal>
       </Portal>
+      {isLargeScreen ? (
+        <DataTable>
+          <DataTable.Header>
+            <DataTable.Title>Model ID</DataTable.Title>
+            <DataTable.Title>Model Name</DataTable.Title>
+            <DataTable.Title>Created At</DataTable.Title>
+            <DataTable.Title>Created On</DataTable.Title>
+            <DataTable.Title>Actions</DataTable.Title>
+          </DataTable.Header>
+
+          {props.modelsList.slice(from, to).map((item) => (
+            <DataTable.Row key={item.modelID}>
+              <DataTable.Cell>{item.modelID}</DataTable.Cell>
+              <DataTable.Cell>{item.modelName}</DataTable.Cell>
+              <DataTable.Cell>
+                {getLocaleDateTime(item.createdAt!)[0]}
+              </DataTable.Cell>
+              <DataTable.Cell>
+                {getLocaleDateTime(item.createdAt!)[1]}
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Card.Actions>
+                  {/* <Button>Cancel</Button> */}
+                  <Button onPress={() => handleShowDetails(item)}>
+                    Details
+                  </Button>
+                </Card.Actions>
+              </DataTable.Cell>
+            </DataTable.Row>
+          ))}
+
+          <DataTable.Pagination
+            page={page}
+            numberOfPages={Math.ceil(props.modelsList.length / itemsPerPage)}
+            onPageChange={(page) => setPage(page)}
+            label={`${from + 1}-${to} of ${props.modelsList.length}`}
+            numberOfItemsPerPageList={numItemsPerPage}
+            numberOfItemsPerPage={itemsPerPage}
+            onItemsPerPageChange={onItemsPerPageChange}
+            showFastPaginationControls
+            selectPageDropdownLabel={"Rows per page"}
+          />
+        </DataTable>
+      ) : (
+        <>
+          <DataTable>
+            <DataTable.Header>
+              <DataTable.Title>Model ID</DataTable.Title>
+              <DataTable.Title>Model Name</DataTable.Title>
+            </DataTable.Header>
+
+            {props.modelsList.slice(from, to).map((item) => (
+              <DataTable.Row key={item.modelID}>
+                <DataTable.Cell>{item.modelID}</DataTable.Cell>
+                <DataTable.Cell>{item.modelName}</DataTable.Cell>
+              </DataTable.Row>
+            ))}
+          </DataTable>
+          <DataTable>
+            <DataTable.Header>
+              <DataTable.Title>Created At</DataTable.Title>
+              <DataTable.Title>Created On</DataTable.Title>
+              <DataTable.Title>Actions</DataTable.Title>
+            </DataTable.Header>
+
+            {props.modelsList.slice(from, to).map((item) => (
+              <DataTable.Row key={item.modelID}>
+                <DataTable.Cell>
+                  {getLocaleDateTime(item.createdAt!)[0]}
+                </DataTable.Cell>
+                <DataTable.Cell>
+                  {getLocaleDateTime(item.createdAt!)[1]}
+                </DataTable.Cell>
+                <DataTable.Cell>
+                  <Card.Actions>
+                    {/* <Button>Cancel</Button> */}
+                    <Button onPress={() => handleShowDetails(item)}>
+                      Details
+                    </Button>
+                  </Card.Actions>
+                </DataTable.Cell>
+              </DataTable.Row>
+            ))}
+
+            <DataTable.Pagination
+              page={page}
+              numberOfPages={Math.ceil(props.modelsList.length / itemsPerPage)}
+              onPageChange={(page) => setPage(page)}
+              label={`${from + 1}-${to} of ${props.modelsList.length}`}
+              numberOfItemsPerPageList={numItemsPerPage}
+              numberOfItemsPerPage={itemsPerPage}
+              onItemsPerPageChange={onItemsPerPageChange}
+              showFastPaginationControls
+              selectPageDropdownLabel={"Rows per page"}
+            />
+          </DataTable>
+        </>
+      )}
+
       <ScrollView>
         {props.modelsList.map((model, key) => (
           <React.Fragment key={key}>
             <Card>
-              <Card.Title
-                title={model.modelName}
-                // subtitle={`Created at ${model.createdAt} by ${model.createdBy}`}
-              />
+              <Card.Title title={model.modelName} />
               <Card.Content>
                 <Text variant="bodyMedium">{`Created at ${model.createdAt} by ${model.createdBy}`}</Text>
               </Card.Content>
-              {/* <Card.Cover source={{ uri: "https://picsum.photos/700" }} /> */}
               <Card.Actions>
-                {/* <Button>Cancel</Button> */}
                 <Button onPress={() => handleShowDetails(model)}>
                   Details
                 </Button>

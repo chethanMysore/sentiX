@@ -7,6 +7,8 @@ import { ModelList } from "@/components/ModelList";
 import { AppStateProps, ModelStateProps } from "@/data/PropTypes";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllModels } from "@/src/actions/model";
+import { SentixContainer, SentixForm } from "@/components/Themed-Paper";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function DashboardScreen() {
   const modelState = useSelector((state: AppStateProps) => state.model);
@@ -18,27 +20,22 @@ export default function DashboardScreen() {
     }
   });
   return (
-    <View style={styles.container}>
-      <Text>Subscribed Models</Text>
+    <ScrollView>
+      <SentixContainer>
+        <SentixForm>
+          <Text style={styles.title}>Subscribed Models</Text>
 
-      <ModelList modelsList={modelState.modelsList} selectedModel={null} />
-    </View>
+          <ModelList modelsList={modelState.modelsList} selectedModel={null} />
+        </SentixForm>
+      </SentixContainer>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   title: {
     fontSize: 20,
     fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+    textAlign: "center",
   },
 });

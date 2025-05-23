@@ -1,8 +1,12 @@
-import { CountryProps, NotificationOptionProps } from "@/data/PropTypes";
+import {
+  CountryProps,
+  DataPaginationProps,
+  NotificationOptionProps,
+} from "@/data/PropTypes";
 // API Base Paths
 export const apiTrainBasePath = "http://127.0.0.1:8000";
-// export const apiInferenceBasePath = "http://localhost:8080/api/v1";
-export const apiInferenceBasePath = "http://10.0.2.2:8080/api/v1";
+export const apiInferenceBasePath = "http://localhost:8080/api/v1";
+// export const apiInferenceBasePath = "http://10.0.2.2:8080/api/v1";
 export const homeUrl = "http://localhost:3000";
 
 // Auth Paths
@@ -114,4 +118,8 @@ export const DeviceSizes = {
     maxWidth: 1079,
     minWidth: 565,
   },
+};
+
+export const DataTablePagination: DataPaginationProps = {
+  numItemsPerPage: [2, 5, 10],
 };

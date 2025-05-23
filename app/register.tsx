@@ -5,6 +5,8 @@ import {
   TextInput,
   TouchableOpacity,
   Dropdown,
+  SentixContainer,
+  SentixForm,
 } from "@/components/Themed-Paper";
 import { ScrollView, StyleSheet } from "react-native";
 import { registerUser } from "@/src/actions";
@@ -18,7 +20,6 @@ import { Formik } from "formik";
 import { showLoader } from "@/src/actions/notification";
 import { isLargeDevice, isMediumDevice } from "@/src/util";
 import { Card } from "react-native-paper";
-import { theme } from "@/constants/AppTheme";
 import { countryAttributes } from "@/assets/countryCodes";
 
 const RegisterPage = () => {
@@ -49,14 +50,14 @@ const RegisterPage = () => {
     // console.log(values);
   };
   return (
-    <View style={styles.container}>
-      <Card
+    <SentixContainer>
+      <SentixForm
         style={
           isLargeScreen
-            ? [styles.centeredView, styles.largeDeviceContainer]
+            ? styles.largeDeviceContainer
             : isMediumScreen
-            ? [styles.centeredView, styles.mediumDeviceContainer]
-            : [styles.centeredView, styles.smallDeviceContainer]
+            ? styles.mediumDeviceContainer
+            : styles.smallDeviceContainer
         }
       >
         <Text style={styles.title}>Welcome to Sentix!</Text>
@@ -254,34 +255,12 @@ const RegisterPage = () => {
             )}
           </Formik>
         </Card.Content>
-      </Card>
-    </View>
+      </SentixForm>
+    </SentixContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: theme.colors.plainContainer,
-    height: "100%",
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: theme.colors.primaryContainer,
-    borderRadius: 20,
-    padding: 20,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    zIndex: 1000,
-  },
   largeDeviceContainer: {
     margin: "30%",
     minHeight: "80%",

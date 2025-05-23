@@ -1,43 +1,73 @@
 import { StatusBar } from "expo-status-bar";
 import { Platform, StyleSheet } from "react-native";
 
-import { Text, View, TouchableOpacity } from "@/components/Themed-Paper";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  SentixContainer,
+  SentixForm,
+} from "@/components/Themed-Paper";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/src/actions";
 import { hideLoader } from "@/src/actions/notification";
+import { isLargeDevice, isMediumDevice } from "@/src/util";
+import { Card } from "react-native-paper";
 
 export default function LogoutScreen() {
+  const isLargeScreen = isLargeDevice();
+  const isMediumScreen = isMediumDevice();
   const dispatch = useDispatch();
   const handleLogout = async () => {
     dispatch(hideLoader());
     dispatch(logoutUser());
   };
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Are you Sure?</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <TouchableOpacity onPress={handleLogout} style={styles.button}>
-        <Text style={{ color: "#fff" }}>Logout</Text>
-      </TouchableOpacity>
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
-    </View>
+    <SentixContainer>
+      <SentixForm
+        style={
+          isLargeScreen
+            ? styles.largeDeviceContainer
+            : isMediumScreen
+            ? styles.mediumDeviceContainer
+            : styles.smallDeviceContainer
+        }
+      >
+        <Text style={styles.title}>Are you Sure?</Text>
+        <View
+          style={styles.separator}
+          lightColor="#eee"
+          darkColor="rgba(255,255,255,0.1)"
+        />
+        <Card.Actions style={{ alignSelf: "center" }}>
+          <TouchableOpacity onPress={handleLogout} style={styles.button}>
+            <Text style={{ color: "#fff" }}>Logout</Text>
+          </TouchableOpacity>
+        </Card.Actions>
+        {/* Use a light status bar on iOS to account for the black space above the modal */}
+        <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
+      </SentixForm>
+    </SentixContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+  largeDeviceContainer: {
+    margin: "35%",
+    minHeight: "50%",
+  },
+  mediumDeviceContainer: {
+    margin: "25%",
+    minHeight: "50%",
+  },
+  smallDeviceContainer: {
+    margin: "10%",
+    maxHeight: "50%",
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
+    textAlign: "center",
   },
   separator: {
     marginVertical: 30,

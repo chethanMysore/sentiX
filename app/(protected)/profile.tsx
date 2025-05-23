@@ -12,7 +12,12 @@ import {
 import { AppStateProps, UserProps } from "@/data/PropTypes";
 import { showLoader } from "@/src/actions/notification";
 import { updateUserData } from "@/src/actions/user";
-import { getCountryNameFromCode, getPhoneCode } from "@/src/util";
+import {
+  getCountryNameFromCode,
+  getPhoneCode,
+  isLargeDevice,
+  isMediumDevice,
+} from "@/src/util";
 import { getLocaleDateTime } from "@/src/util/dateTimeUtil";
 import { Formik } from "formik";
 import { FormEvent, useState } from "react";
@@ -21,6 +26,8 @@ import { Card } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function ProfileScreen() {
+  const isLargeScreen = isLargeDevice();
+  const isMediumScreen = isMediumDevice();
   const dispatch = useDispatch();
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const authState = useSelector((state: AppStateProps) => state.auth);
@@ -40,9 +47,8 @@ export default function ProfileScreen() {
   const createdDateTime = getLocaleDateTime(authUser?.createdAt!);
   const modifiedDateTime = getLocaleDateTime(authUser?.modifiedAt!);
   return (
-    <Card style={styles.centeredView}>
-      {/* <ScrollView> */}
-      <View style={{ width: "100%", height: "100%" }}>
+    <View style={styles.container}>
+      <Card style={styles.centeredView}>
         {showUpdateForm ? (
           <Text style={styles.title}>Update My Details</Text>
         ) : (
@@ -268,9 +274,8 @@ export default function ProfileScreen() {
             )}
           </Formik>
         </Card.Content>
-      </View>
-      {/* </ScrollView> */}
-    </Card>
+      </Card>
+    </View>
   );
 }
 const styles = StyleSheet.create({
@@ -304,15 +309,18 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "red",
   },
+  container: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: theme.colors.plainContainer,
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",
-    // alignItems: "center",
     margin: "10%",
-    backgroundColor: "white",
+    backgroundColor: theme.colors.primaryContainer,
     borderRadius: 20,
     padding: 20,
-    // alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

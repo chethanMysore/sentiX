@@ -4,19 +4,19 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  SentixContainer,
+  SentixForm,
 } from "@/components/Themed-Paper";
 import { StyleSheet } from "react-native";
 import { loginUser } from "@/src/actions";
 import { useDispatch } from "react-redux";
-import Colors from "@/constants/Colors";
 import { Link } from "expo-router";
 import { UserProps } from "@/data/PropTypes";
 import { Formik } from "formik";
 import { initLoginValues, loginSchema } from "@/constants/ValidationSchemas";
 import { showLoader } from "@/src/actions/notification";
 import { Card } from "react-native-paper";
-import { isLargeDevice, isMediumDevice, isSmallDevice } from "@/src/util";
-import { theme } from "@/constants/AppTheme";
+import { isLargeDevice, isMediumDevice } from "@/src/util";
 
 const LoginPage = () => {
   const isLargeScreen = isLargeDevice();
@@ -31,14 +31,14 @@ const LoginPage = () => {
     dispatch(loginUser(user));
   };
   return (
-    <View style={styles.container}>
-      <Card
+    <SentixContainer>
+      <SentixForm
         style={
           isLargeScreen
-            ? [styles.centeredView, styles.largeDeviceContainer]
+            ? styles.largeDeviceContainer
             : isMediumScreen
-            ? [styles.centeredView, styles.mediumDeviceContainer]
-            : [styles.centeredView, styles.smallDeviceContainer]
+            ? styles.mediumDeviceContainer
+            : styles.smallDeviceContainer
         }
       >
         <Text style={styles.title}>Welcome to Sentix!</Text>
@@ -112,34 +112,12 @@ const LoginPage = () => {
             New to SentiX? Register Now!
           </Text>
         </Link>
-      </Card>
-    </View>
+      </SentixForm>
+    </SentixContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: theme.colors.plainContainer,
-    height: "100%",
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: theme.colors.primaryContainer,
-    borderRadius: 20,
-    padding: 20,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    zIndex: 1000,
-  },
   largeDeviceContainer: {
     margin: "35%",
     minHeight: "50%",

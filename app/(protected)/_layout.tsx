@@ -1,6 +1,9 @@
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  GestureHandlerRootView,
+  ScrollView,
+} from "react-native-gesture-handler";
 import { UserRoles } from "@/constants/DefaultValues";
 import { Drawer } from "expo-router/drawer";
 import Colors from "@/constants/Colors";

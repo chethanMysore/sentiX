@@ -14,6 +14,7 @@ import {
   NativeSyntheticEvent,
   TextInputKeyPressEventData,
   TextInputChangeEventData,
+  StyleSheet,
 } from "react-native";
 
 import {
@@ -27,6 +28,8 @@ import {
 import {
   TextInput as PaperTextInput,
   Text as PaperText,
+  Card,
+  CardProps as DefaultCardProps,
 } from "react-native-paper";
 
 import Colors from "@/constants/Colors";
@@ -46,6 +49,7 @@ export type TextProps = ThemeProps & DefaultText["props"];
 export type ViewProps = ThemeProps & DefaultView["props"];
 export type TextInputProps = ThemeProps & DefaultTextInput["props"];
 export type ButtonProps = ThemeProps & TouchableOpacityProps;
+export type CardProps = ThemeProps & DefaultCardProps;
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
@@ -125,6 +129,38 @@ export function TouchableOpacity(props: ButtonProps) {
       ]}
       {...otherProps}
     />
+  );
+}
+
+export function SentixContainer(props: ViewProps) {
+  const theme = useAppTheme();
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  return (
+    <DefaultView
+      style={[
+        { backgroundColor: theme.colors.plainContainer },
+        styles.container,
+        style,
+      ]}
+      {...otherProps}
+    />
+  );
+}
+
+export function SentixForm(props: CardProps) {
+  const theme = useAppTheme();
+  const { style, lightColor, darkColor, children, ...otherProps } = props;
+
+  return (
+    <Card
+      style={[
+        { backgroundColor: theme.colors.primaryContainer },
+        styles.centeredView,
+        style,
+      ]}
+    >
+      {children}
+    </Card>
   );
 }
 
@@ -220,3 +256,28 @@ export function Dropdown(props: DropdownProps) {
     />
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    // backgroundColor: theme.colors.plainContainer,
+    height: "100%",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    // backgroundColor: theme.colors.primaryContainer,
+    borderRadius: 20,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    zIndex: 1000,
+  },
+});
