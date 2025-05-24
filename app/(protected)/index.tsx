@@ -24,7 +24,11 @@ export default function DashboardScreen() {
       <SentixContainer>
         <SentixForm>
           <Text style={styles.title}>Subscribed Models</Text>
-
+          <View
+            style={styles.separator}
+            lightColor="#eee"
+            darkColor="rgba(255,255,255,0.1)"
+          />
           <ModelList modelsList={modelState.modelsList} selectedModel={null} />
         </SentixForm>
       </SentixContainer>
@@ -37,5 +41,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  separator: {
+    marginVertical: 10,
+    height: 1,
+    width: "100%",
   },
 });
