@@ -30,6 +30,7 @@ export const modelsListPath = "/models/all";
 export const modelByIDPath = "/models/id";
 export const modelsByNamePath = "/models/name";
 export const modelsByUsernamePath = "/models/username";
+export const modelRunsByIDPath = "models/runs/id";
 
 // Data Creation/Manipulation Paths
 export const userEditByIDPath = "/users/edit";

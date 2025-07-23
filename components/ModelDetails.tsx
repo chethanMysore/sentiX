@@ -22,6 +22,7 @@ import { updateModelDetails } from "@/src/actions/model";
 import { theme } from "@/constants/AppTheme";
 import { Button, Card } from "react-native-paper";
 import { getLocaleDateTime } from "@/src/util/dateTimeUtil";
+import { ModelRuns } from "@/data/sample-data";
 
 export const ModelDetails = (props: ModalComponentProps) => {
   const dispatch = useDispatch();
@@ -37,6 +38,7 @@ export const ModelDetails = (props: ModalComponentProps) => {
     dispatch(showLoader());
     dispatch(updateModelDetails(model));
   };
+  const modelRunLogSample = ModelRuns;
   const createdDateTime = getLocaleDateTime(props.selectedModel?.createdAt!);
   const modifiedDateTime = getLocaleDateTime(props.selectedModel?.modifiedAt!);
   return (
@@ -121,6 +123,25 @@ export const ModelDetails = (props: ModalComponentProps) => {
                     disabled
                     aria-disabled
                   />
+                  {modelRunLogSample.map((run) => (
+                    <>
+                      <Text style={styles.modalText}>{run.runID}</Text>
+                      <Text style={styles.modalText}>{run.nickName}</Text>
+                      <Text style={styles.modalText}>{run.execStatus}</Text>
+                      <Text style={styles.modalText}>
+                        {run.execDuration != 0 ? run.execDuration / 1000 : 0} .s
+                      </Text>
+                      {run.outputCharts?.map((chart) => {
+                        let chartDataStr = atob(chart);
+                        let chartData = JSON.parse(chartDataStr);
+                        return (
+                          <Text style={styles.modalText}>
+                            {JSON.stringify(chartData)}
+                          </Text>
+                        );
+                      })}
+                    </>
+                  ))}
                   <Card.Actions style={{ alignSelf: "center" }}>
                     {showUpdateForm ? (
                       <>

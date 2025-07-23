@@ -141,6 +141,26 @@ export type ActionProps = {
     string;
 };
 
+export type ModelChartProps = {
+  xCoords: Float32Array;
+  yCoords: Float32Array;
+  xLabel: string;
+  yLabel: string;
+  chartLabel: string;
+};
+
+export type ModelRunProps = {
+  modelID: string;
+  runID: string;
+  nickName: string;
+  execStart?: string;
+  execEnd?: string;
+  execDuration: number;
+  execStatus: string;
+  outputImages?: string[];
+  outputCharts?: string[];
+};
+
 export type URLParams = {
   key: string;
   value: string;

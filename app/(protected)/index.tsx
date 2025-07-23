@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllModels } from "@/src/actions/model";
 import { SentixContainer, SentixForm } from "@/components/Themed-Paper";
 import { ScrollView } from "react-native-gesture-handler";
+import { DataVizTableau } from "@/components/DataVizTableau";
+import { Surface } from "react-native-paper";
 
 export default function DashboardScreen() {
   const modelState = useSelector((state: AppStateProps) => state.model);
@@ -30,6 +32,7 @@ export default function DashboardScreen() {
             darkColor="rgba(255,255,255,0.1)"
           />
           <ModelList modelsList={modelState.modelsList} selectedModel={null} />
+          <DataVizTableau />
         </SentixForm>
       </SentixContainer>
     </ScrollView>
