@@ -142,8 +142,8 @@ export type ActionProps = {
 };
 
 export type ModelChartProps = {
-  xCoords: Float32Array;
-  yCoords: Float32Array;
+  xCoords: number[];
+  yCoords: number[];
   xLabel: string;
   yLabel: string;
   chartLabel: string;

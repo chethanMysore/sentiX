@@ -11,11 +11,11 @@ import {
   TextInput,
 } from "react-native-paper";
 import {
-  ScrollView,
   StyleSheet,
   Alert,
   Pressable,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { ModelDetails } from "./ModelDetails";
 import { View } from "./Themed-Paper";
@@ -56,7 +56,10 @@ export const ModelList = (props: ModelStateProps) => {
           <TouchableOpacity
             activeOpacity={1}
             onPressOut={() => setModalVisible(false)}
-            style={{ cursor: "auto" }}
+            style={{
+              cursor: "auto",
+              height: Dimensions.get("screen").height,
+            }}
           >
             <ModelDetails
               selectedModel={selectedModel}

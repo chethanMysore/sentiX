@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllModels } from "@/src/actions/model";
 import { SentixContainer, SentixForm } from "@/components/Themed-Paper";
 import { ScrollView } from "react-native-gesture-handler";
-import { DataVizTableau } from "@/components/DataVizTableau";
+// import { DataVizTableau } from "@/components/DataVizTableau";
 import { Surface } from "react-native-paper";
 
 export default function DashboardScreen() {
@@ -22,7 +22,7 @@ export default function DashboardScreen() {
     }
   });
   return (
-    <ScrollView>
+    <ScrollView nestedScrollEnabled={true}>
       <SentixContainer>
         <SentixForm>
           <Text style={styles.title}>Subscribed Models</Text>
@@ -32,7 +32,7 @@ export default function DashboardScreen() {
             darkColor="rgba(255,255,255,0.1)"
           />
           <ModelList modelsList={modelState.modelsList} selectedModel={null} />
-          <DataVizTableau />
+          {/* <DataVizTableau /> */}
         </SentixForm>
       </SentixContainer>
     </ScrollView>
