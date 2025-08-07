@@ -8,10 +8,15 @@ const nativeBlacklistedModules = ["@tableau/embedding-api-react"];
 const config = getDefaultConfig(__dirname);
 
 config.resolver.resolveRequest = (context, moduleName, platform) => {
-  if (platform !== "web" && nativeBlacklistedModules.includes(moduleName)) {
-    return {
-      type: "empty",
-    };
+  if (platform !== "web") {
+    if (moduleName === "victory") {
+      return context.resolveRequest(context, "victory-native", platform);
+    }
+    if (nativeBlacklistedModules.includes(moduleName)) {
+      return {
+        type: "empty",
+      };
+    }
   }
   // Default behavior for other module resolutions
   return context.resolveRequest(context, moduleName, platform);

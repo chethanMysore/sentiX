@@ -57,6 +57,17 @@ const AppLayout = () => {
           redirect={authState?.isAuthenticated === false}
         />
         <Drawer.Screen
+          name="runDetails"
+          options={{
+            headerTitle: "Run Details",
+            drawerLabel: "Run Log",
+            drawerIcon: ({ size, color }) => (
+              <FontAwesome name="info-circle" color={color} size={size} />
+            ),
+          }}
+          redirect={authState?.isAuthenticated === false}
+        />
+        <Drawer.Screen
           name="admin"
           options={{
             headerTitle: "Admin Dashboard",

@@ -13,8 +13,8 @@ const WebViz = (props: any) => {
         src={props.src}
         toolbar="hidden"
         hideTabs
-        // height="100%"
-        width="100%"
+        // height={600}
+        width={"100%"}
       />
     </View>
   );
@@ -39,6 +39,7 @@ export const DataVizTableau = () => {
     "https://public.tableau.com/views/DS6_17530937979340/OverviewDashboard?:embed=y&:tooltip=n&:toolbar=n&:showVizHome=no&:mobile=y&:showAppBanner=n";
 
   return (
+    // <View style={styles.chartCardContainer}>
     <Surface elevation={4}>
       <Card style={styles.dataCard}>
         <Card.Title
@@ -61,6 +62,7 @@ export const DataVizTableau = () => {
         </Card.Content>
       </Card>
     </Surface>
+    // </View>
   );
 };
 
@@ -74,6 +76,7 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: theme.colors.plainContainer,
     textAlign: "center",
+    maxHeight: "100%",
   },
   dataCardContent: {
     flex: 1,
@@ -132,12 +135,18 @@ const styles = StyleSheet.create({
   },
   webView: {
     flex: 1,
-    // height: 600,
-    width: "100%",
+    width: Dimensions.get("screen").width * 0.8,
+    // width: "auto",
     // margin: "2%",
     marginLeft: "auto",
-    marginRight: "auto",
+    // marginRight: "auto",
     backgroundColor: theme.colors.plainContainer,
-    alignItems: "center",
+    // maxHeight: "100%",
+  },
+  chartCardContainer: {
+    flex: 1,
+    justifyContent: "center",
+    height: "30%",
+    width: "100%",
   },
 });

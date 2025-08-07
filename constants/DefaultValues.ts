@@ -3,10 +3,13 @@ import {
   DataPaginationProps,
   NotificationOptionProps,
 } from "@/data/PropTypes";
+import { Platform } from "react-native";
 // API Base Paths
 export const apiTrainBasePath = "http://127.0.0.1:8000";
-export const apiInferenceBasePath = "http://localhost:8080/api/v1";
-// export const apiInferenceBasePath = "http://10.0.2.2:8080/api/v1";
+export const apiInferenceBasePathWeb = "http://localhost:8080/api/v1";
+export const apiInferenceBasePathNative = "http://10.0.2.2:8080/api/v1";
+export const apiInferenceBasePath =
+  Platform.OS === "web" ? apiInferenceBasePathWeb : apiInferenceBasePathNative;
 export const homeUrl = "http://localhost:3000";
 
 // Auth Paths

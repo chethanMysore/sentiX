@@ -23,6 +23,9 @@ import { getLocaleDateTime } from "@/src/util/dateTimeUtil";
 import { DataTablePagination } from "@/constants/DefaultValues";
 import { isLargeDevice, isMediumDevice } from "@/src/util";
 import { theme } from "@/constants/AppTheme";
+import { Link } from "expo-router";
+import { FontAwesome } from "@expo/vector-icons";
+import { ModelRuns } from "@/data/sample-data";
 
 export const ModelList = (props: ModelStateProps) => {
   const isLargeScreen = isLargeDevice();
@@ -109,6 +112,24 @@ export const ModelList = (props: ModelStateProps) => {
               </Card.Content>
               <Card.Actions style={{ alignSelf: "center" }}>
                 <Button onPress={() => handleShowDetails(item)}>Details</Button>
+                <Link
+                  href={{
+                    pathname: "/runDetails",
+                    params: { runID: ModelRuns[0].runID },
+                  }}
+                  asChild
+                >
+                  <Pressable>
+                    {({ pressed }) => (
+                      <FontAwesome
+                        name="external-link"
+                        size={25}
+                        color={theme.colors.primary}
+                        style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                      />
+                    )}
+                  </Pressable>
+                </Link>
               </Card.Actions>
             </Card>
           </Surface>

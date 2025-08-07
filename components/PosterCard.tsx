@@ -41,9 +41,10 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: theme.colors.darkContainer,
     textAlign: "center",
-    minHeight: "100%",
+    // minHeight: "100%",
+    maxHeight: "100%",
     justifyContent: "center",
-    height: "100%",
+    // height: "100%",
   },
   posterCardContainer: {
     flex: 1,
