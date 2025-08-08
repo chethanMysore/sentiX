@@ -135,11 +135,6 @@ export const ModelList = (props: ModelStateProps) => {
           </Surface>
           // </DataTable.Row>
         ))}
-        {/* <View
-          style={styles.separator}
-          lightColor="#eee"
-          darkColor="rgba(255,255,255,0.1)"
-        /> */}
         <DataTable.Pagination
           page={page}
           numberOfPages={Math.ceil(props.modelsList.length / itemsPerPage)}
@@ -152,125 +147,6 @@ export const ModelList = (props: ModelStateProps) => {
           selectPageDropdownLabel={"Rows per page"}
         />
       </DataTable>
-      {/* {isLargeScreen ? (
-        <DataTable>
-          <DataTable.Header>
-            <DataTable.Title>Model ID</DataTable.Title>
-            <DataTable.Title>Model Name</DataTable.Title>
-            <DataTable.Title>Created At</DataTable.Title>
-            <DataTable.Title>Created On</DataTable.Title>
-            <DataTable.Title>Actions</DataTable.Title>
-          </DataTable.Header>
-
-          {props.modelsList.slice(from, to).map((item) => (
-            <DataTable.Row key={item.modelID}>
-              <DataTable.Cell>{item.modelID}</DataTable.Cell>
-              <DataTable.Cell>{item.modelName}</DataTable.Cell>
-              <DataTable.Cell>
-                {getLocaleDateTime(item.createdAt!)[0]}
-              </DataTable.Cell>
-              <DataTable.Cell>
-                {getLocaleDateTime(item.createdAt!)[1]}
-              </DataTable.Cell>
-              <DataTable.Cell>
-                <Card.Actions>
-                  <Button onPress={() => handleShowDetails(item)}>
-                    Details
-                  </Button>
-                </Card.Actions>
-              </DataTable.Cell>
-            </DataTable.Row>
-          ))}
-
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={Math.ceil(props.modelsList.length / itemsPerPage)}
-            onPageChange={(page) => setPage(page)}
-            label={`${from + 1}-${to} of ${props.modelsList.length}`}
-            numberOfItemsPerPageList={numItemsPerPage}
-            numberOfItemsPerPage={itemsPerPage}
-            onItemsPerPageChange={onItemsPerPageChange}
-            showFastPaginationControls
-            selectPageDropdownLabel={"Rows per page"}
-          />
-        </DataTable>
-      ) : (
-        <>
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title>Model ID</DataTable.Title>
-              <DataTable.Title>Model Name</DataTable.Title>
-            </DataTable.Header>
-
-            {props.modelsList.slice(from, to).map((item) => (
-              <DataTable.Row key={item.modelID}>
-                <DataTable.Cell>{item.modelID}</DataTable.Cell>
-                <DataTable.Cell>{item.modelName}</DataTable.Cell>
-              </DataTable.Row>
-            ))}
-          </DataTable>
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title>Created At</DataTable.Title>
-              <DataTable.Title>Created On</DataTable.Title>
-              <DataTable.Title>Actions</DataTable.Title>
-            </DataTable.Header>
-
-            {props.modelsList.slice(from, to).map((item) => (
-              <DataTable.Row key={item.modelID}>
-                <DataTable.Cell>
-                  {getLocaleDateTime(item.createdAt!)[0]}
-                </DataTable.Cell>
-                <DataTable.Cell>
-                  {getLocaleDateTime(item.createdAt!)[1]}
-                </DataTable.Cell>
-                <DataTable.Cell>
-                  <Card.Actions>
-                    <Button onPress={() => handleShowDetails(item)}>
-                      Details
-                    </Button>
-                  </Card.Actions>
-                </DataTable.Cell>
-              </DataTable.Row>
-            ))}
-
-            <DataTable.Pagination
-              page={page}
-              numberOfPages={Math.ceil(props.modelsList.length / itemsPerPage)}
-              onPageChange={(page) => setPage(page)}
-              label={`${from + 1}-${to} of ${props.modelsList.length}`}
-              numberOfItemsPerPageList={numItemsPerPage}
-              numberOfItemsPerPage={itemsPerPage}
-              onItemsPerPageChange={onItemsPerPageChange}
-              showFastPaginationControls
-              selectPageDropdownLabel={"Rows per page"}
-            />
-          </DataTable>
-        </>
-      )} */}
-
-      {/* <ScrollView>
-        {props.modelsList.map((model, key) => (
-          <React.Fragment key={key}>
-            <Card>
-              <Card.Title title={model.modelName} />
-              <Card.Content>
-                <Text variant="bodyMedium">{`Created at ${model.createdAt} by ${model.createdBy}`}</Text>
-              </Card.Content>
-              <Card.Actions>
-                <Button onPress={() => handleShowDetails(model)}>
-                  Details
-                </Button>
-              </Card.Actions>
-            </Card>
-            <View
-              style={styles.separator}
-              lightColor="#eee"
-              darkColor="rgba(255,255,255,0.1)"
-            />
-          </React.Fragment>
-        ))}
-      </ScrollView> */}
     </>
   ) : (
     <Card>

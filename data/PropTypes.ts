@@ -161,6 +161,16 @@ export type ModelRunProps = {
   outputCharts?: string[];
 };
 
+export type RunSearchParams = {
+  runID: string;
+};
+
+export type PosterCarouselProps = {
+  outputPosters: string[];
+  width: number;
+  posterType: string;
+};
+
 export type URLParams = {
   key: string;
   value: string;

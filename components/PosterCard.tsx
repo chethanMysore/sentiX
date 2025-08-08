@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     height: "100%",
+    backgroundColor: theme.colors.secondaryContainer,
   },
   posterCardContainerSurface: {
     minHeight: "100%",

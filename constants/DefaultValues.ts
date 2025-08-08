@@ -33,6 +33,7 @@ export const modelsListPath = "/models/all";
 export const modelByIDPath = "/models/id";
 export const modelsByNamePath = "/models/name";
 export const modelsByUsernamePath = "/models/username";
+export const modelRuns = "models/runs/all";
 export const modelRunsByIDPath = "models/runs/id";
 
 // Data Creation/Manipulation Paths
@@ -106,6 +107,11 @@ export enum LoaderColors {
 export enum LoaderSize {
   LARGE = "large",
   SMALL = "small",
+}
+
+export enum PosterType {
+  CHART = "chart",
+  IMAGE = "image",
 }
 
 export const DeviceSizes = {
