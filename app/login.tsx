@@ -16,11 +16,12 @@ import { Formik } from "formik";
 import { initLoginValues, loginSchema } from "@/constants/ValidationSchemas";
 import { showLoader } from "@/src/actions/notification";
 import { Card } from "react-native-paper";
-import { isLargeDevice, isMediumDevice } from "@/src/util";
+import { isLargeDevice, isMediumDevice, isSmallDevice } from "@/src/util";
 
 const LoginPage = () => {
   const isLargeScreen = isLargeDevice();
   const isMediumScreen = isMediumDevice();
+  const isSmallScreen = isSmallDevice();
   const dispatch = useDispatch();
   const handleLogin = async (values: any) => {
     let user: UserProps = {
@@ -30,6 +31,7 @@ const LoginPage = () => {
     dispatch(showLoader());
     dispatch(loginUser(user));
   };
+
   return (
     <SentixContainer>
       <SentixForm

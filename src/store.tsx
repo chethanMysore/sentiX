@@ -1,7 +1,7 @@
 import createSagaMiddleware from "redux-saga";
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "@/src/reducers/auth";
-import { modelReducer, userReducer } from "./reducers";
+import { modelReducer, modelRunReducer, userReducer } from "./reducers";
 import { notificationReducer } from "./reducers/notification";
 import rootSaga from "./sagas";
 
@@ -12,6 +12,7 @@ export const store = configureStore({
     auth: authReducer,
     user: userReducer,
     model: modelReducer,
+    modelRunLog: modelRunReducer,
     notification: notificationReducer,
   },
   middleware: (getDefaultMiddleware) =>

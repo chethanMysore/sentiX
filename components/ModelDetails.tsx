@@ -8,6 +8,7 @@ import {
   Dimensions,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   TouchableWithoutFeedback,
 } from "react-native";
@@ -26,7 +27,7 @@ import { Button, Card } from "react-native-paper";
 import { getLocaleDateTime } from "@/src/util/dateTimeUtil";
 import { ModelRuns } from "@/data/sample-data";
 import { DataVizTableau } from "./DataVizTableau";
-import { ScrollView } from "react-native-gesture-handler";
+// import { ScrollView } from "react-native-gesture-handler";
 import Carousel, {
   ICarouselInstance,
   Pagination,
@@ -152,7 +153,7 @@ export const ModelDetails = (props: ModalComponentProps) => {
                       disabled
                       aria-disabled
                     />
-                    <Text style={styles.modalText}>Model Run Details</Text>
+                    {/* <Text style={styles.modalText}>Model Run Details</Text>
                     {modelRunLogSample.map((run) => (
                       <View style={styles.runDetailsContainer} key={run.runID}>
                         <Text style={styles.modalText}>{run.runID}</Text>
@@ -216,7 +217,7 @@ export const ModelDetails = (props: ModalComponentProps) => {
                           </View>
                         )}
                       </View>
-                    ))}
+                    ))} */}
 
                     <Card.Actions style={{ alignSelf: "center" }}>
                       {showUpdateForm ? (

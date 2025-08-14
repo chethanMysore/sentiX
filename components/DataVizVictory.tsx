@@ -27,6 +27,7 @@ import {
 } from "victory";
 
 const ChartViz = (props: ModelChartProps) => {
+  const isLargeScreen = isLargeDevice();
   const chartDataset = props.xCoords.map((x, i) => ({
     x: x,
     y: props.yCoords[i],
@@ -47,7 +48,7 @@ const ChartViz = (props: ModelChartProps) => {
         )
       }
       theme={VictoryTheme.clean}
-      height={styles.webView.height}
+      height={Platform.OS !== "web" || isLargeScreen ? 250 : 400}
       padding={
         Platform.OS === "web"
           ? { top: 5, bottom: 60, left: 60, right: 60 }
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   webView: {
-    height: 300,
+    height: 400,
   },
   chartTooltip: {
     opacity: 30,
@@ -183,50 +184,3 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 });
-
-// const SampleViz = (props: ModelChartProps) => {
-//   const victory = require("victory-native");
-//   const skia = require("@shopify/react-native-skia");
-//   const spaceFont = require("../assets/fonts/SpaceMono-Regular.ttf");
-//   const { CartesianChart, Line, Area, useChartTransformState } = victory;
-//   const { Text, useFont } = skia;
-//   const font = useFont(spaceFont, 12);
-//   const chartDataset = props.xCoords.map((x, i) => ({
-//     xCoords: x,
-//     yCoords: props.yCoords[i],
-//   }));
-//   return (
-//     <View style={{ height: 300 }}>
-//       <CartesianChart
-//         data={chartDataset}
-//         xKey="xCoords"
-//         yKeys={["yCoords"]}
-//         xAxis={{
-//           font,
-//         }}
-//         yAxis={[{ yKeys: ["yCoords"], font }]}
-//         padding={20}
-//       >
-//         {({ points, chartBounds }) => (
-//           <>
-//             {/* <Line
-//              points={points.yCoords}
-//              color={theme.colors.primary}
-//              strokeWidth={3}
-//             animate={{ type: "timing", duration: 300 }}
-//            /> */}
-//             <Area
-//               points={points.yCoords}
-//               y0={chartBounds.bottom}
-//               color={theme.colors.primary}
-//               strokeWidth={3}
-//               animate={{ type: "timing", duration: 300 }}
-//             />
-//             <Text x={70} y={50} text={`xAxis: ${props.xLabel}`} font={font} />
-//             <Text x={70} y={70} text={`yAxis: ${props.yLabel}`} font={font} />
-//           </>
-//         )}
-//       </CartesianChart>
-//     </View>
-//   );
-// };

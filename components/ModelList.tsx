@@ -24,7 +24,7 @@ import { DataTablePagination } from "@/constants/DefaultValues";
 import { isLargeDevice, isMediumDevice } from "@/src/util";
 import { theme } from "@/constants/AppTheme";
 import { Link } from "expo-router";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { ModelRuns } from "@/data/sample-data";
 
 export const ModelList = (props: ModelStateProps) => {
@@ -115,14 +115,14 @@ export const ModelList = (props: ModelStateProps) => {
                 <Link
                   href={{
                     pathname: "/runDetails",
-                    params: { runID: ModelRuns[0].runID },
+                    params: { modelID: item.modelID },
                   }}
                   asChild
                 >
                   <Pressable>
                     {({ pressed }) => (
-                      <FontAwesome
-                        name="external-link"
+                      <MaterialIcons
+                        name="query-stats"
                         size={25}
                         color={theme.colors.primary}
                         style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}

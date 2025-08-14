@@ -1,19 +1,31 @@
 // import { DataVizRecharts } from "@/components/DataVizRecharts";
 import { PosterCard } from "@/components/PosterCard";
-import { SentixContainer, SentixForm, View } from "@/components/Themed-Paper";
+import {
+  Dropdown,
+  SentixContainer,
+  SentixForm,
+  View,
+} from "@/components/Themed-Paper";
 import { theme } from "@/constants/AppTheme";
 import {
+  AppStateProps,
+  AuthStateProps,
   ModelChartProps,
   ModelRunProps,
   PosterCarouselProps,
   RunSearchParams,
 } from "@/data/PropTypes";
 import { useLocalSearchParams } from "expo-router";
-import { Children, RefObject, useRef, useState } from "react";
-import { Dimensions, StyleSheet } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { Children, RefObject, useEffect, useRef, useState } from "react";
+import {
+  Dimensions,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
+// import { ScrollView } from "react-native-gesture-handler";
 import { useSharedValue } from "react-native-reanimated";
-import { ModelRuns } from "@/data/sample-data";
 import Carousel, {
   ICarouselInstance,
   Pagination,
@@ -22,23 +34,32 @@ import { DataVizTableau } from "@/components/DataVizTableau";
 import { DataVizVictory } from "@/components/DataVizVictory";
 import { isLargeDevice, isMediumDevice, isSmallDevice } from "@/src/util";
 import { DataTablePagination, PosterType } from "@/constants/DefaultValues";
-import { Card, DataTable, Surface, TextInput, Text } from "react-native-paper";
+import {
+  Card,
+  DataTable,
+  Surface,
+  TextInput,
+  Text,
+  Menu,
+  Button,
+  TouchableRipple,
+} from "react-native-paper";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearRunFilters,
+  fetchAllModelRuns,
+  fetchAllModels,
+  fetchModelRunsByModelID,
+  setSelectedModelID,
+  setSelectedRunID,
+} from "@/src/actions";
+import {
+  FontAwesome,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 // import { DataVizVictory } from "@/components/DataVizVictory";
 // import { DataVizGifted } from "@/components/DataVizGifted";
-
-const DataRow = ({
-  children,
-  isSmallScreen,
-}: {
-  children: any;
-  isSmallScreen: boolean;
-}) => {
-  return !isSmallScreen ? (
-    <>{children}</>
-  ) : (
-    <DataTable.Row>{children}</DataTable.Row>
-  );
-};
 
 const PosterCarousel = (props: PosterCarouselProps) => {
   const ref = useRef<ICarouselInstance>(null);
@@ -51,7 +72,7 @@ const PosterCarousel = (props: PosterCarouselProps) => {
   };
   return (
     <View style={styles.posterCarouselView}>
-      {props.outputPosters.length > 0 ? (
+      {!!props.outputPosters && props.outputPosters.length > 0 ? (
         <>
           <Carousel
             ref={ref}
@@ -90,122 +111,488 @@ const PosterCarousel = (props: PosterCarouselProps) => {
   );
 };
 
+type RunFilterMenuProps = {
+  filters: {
+    label: string;
+    value: string | undefined;
+    onSelect: (value: string) => void;
+    options: {
+      label: string;
+      value: string;
+    }[];
+  }[];
+  filtered: boolean;
+  onClearFilters: () => void;
+  onApplyFilters: () => void;
+};
+
+const RunFilterMenu = (props: RunFilterMenuProps) => {
+  const [filterMenuVisible, setFilterMenuVisible] = useState(false);
+  return (
+    <Menu
+      visible={filterMenuVisible}
+      onDismiss={() => setFilterMenuVisible(false)}
+      anchor={
+        // <Surface elevation={4} style={styles.button}>
+        //   <Button onPress={() => setFilterMenuVisible(true)}>
+        //     <Text>Run Filters</Text>
+        //   </Button>
+
+        // </Surface>
+        <Pressable onPress={() => setFilterMenuVisible(true)}>
+          {({ pressed }) => (
+            <MaterialCommunityIcons
+              name={props.filtered ? "filter-menu" : "filter-menu-outline"}
+              size={25}
+              color={theme.colors.primary}
+              style={{
+                marginRight: 15,
+                opacity: pressed ? 0.5 : 1,
+              }}
+            />
+          )}
+        </Pressable>
+      }
+      anchorPosition="bottom"
+      contentStyle={{
+        padding: 0,
+        marginRight: 20,
+        borderRadius: 20,
+      }}
+    >
+      <Card
+        style={{
+          padding: 0,
+          marginTop: -10,
+          borderRadius: 20,
+          minHeight: "100%",
+        }}
+      >
+        <Card.Content>
+          {props.filters.map((filter) => (
+            <Dropdown
+              key={filter.label}
+              label={filter.label}
+              placeholder={`Select ${filter.label}`}
+              options={filter.options}
+              value={filter.value}
+              onSelect={(value) => {
+                filter.onSelect(value!);
+              }}
+            />
+          ))}
+        </Card.Content>
+        <Card.Actions>
+          <Button
+            onPress={() => {
+              setFilterMenuVisible(false), props.onClearFilters();
+            }}
+          >
+            Clear
+          </Button>
+          <Button
+            onPress={() => {
+              setFilterMenuVisible(false), props.onApplyFilters();
+            }}
+          >
+            Apply
+          </Button>
+        </Card.Actions>
+      </Card>
+    </Menu>
+  );
+};
+
+const VizModalMenu = (props: any) => {
+  const [vizMenuVisible, setVizMenuVisible] = useState(false);
+  return (
+    <Menu
+      visible={vizMenuVisible}
+      onDismiss={() => setVizMenuVisible(false)}
+      anchor={
+        <Pressable onPress={() => setVizMenuVisible(true)}>
+          {({ pressed }) => (
+            <Ionicons
+              name="logo-tableau"
+              size={25}
+              color={theme.colors.primary}
+              style={{
+                marginRight: 15,
+                opacity: pressed ? 0.5 : 1,
+              }}
+            />
+          )}
+        </Pressable>
+      }
+      contentStyle={{
+        minWidth: "90%",
+        marginLeft: -20,
+        borderRadius: 20,
+        padding: 0,
+        // backgroundColor: "red",
+      }}
+    >
+      {/* <Card
+        style={{
+          padding: 0,
+          marginTop: -10,
+          borderRadius: 20,
+          minHeight: "100%",
+        }}
+      >
+        <Card.Content>
+          <DataVizTableau />
+        </Card.Content>
+      </Card> */}
+      <DataVizTableau
+        style={{
+          padding: 0,
+          // margin: 0,
+          marginTop: -10,
+          borderRadius: 20,
+          minHeight: "100%",
+          // backgroundColor: "red"
+        }}
+      />
+    </Menu>
+  );
+};
+
 export default function RunDetailsPage() {
   const isLargeScreen = isLargeDevice();
   const isMediumScreen = isMediumDevice();
   const isSmallScreen = isSmallDevice();
-  const { runID } = useLocalSearchParams<RunSearchParams>();
+  // const { runID, modelID } = useLocalSearchParams<RunSearchParams>();
+
+  const model = useSelector((state: AppStateProps) => state.model);
+  const modelRunLog = useSelector((state: AppStateProps) => state.modelRunLog);
+
+  const [modelID, setModelID] = useState("");
+  const [runID, setRunID] = useState("");
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (modelRunLog.modelRuns.length == 0) {
+      dispatch(fetchAllModelRuns());
+    }
+  });
+
+  const { modelRuns, filteredRuns, selectedRunID, selectedModelID, filtered } =
+    modelRunLog;
+  const runLogs =
+    !!selectedModelID || !!selectedRunID ? filteredRuns : modelRuns;
+
+  const { modelsList } = model;
+  const modelIDs =
+    !!modelsList && modelsList.length > 0
+      ? modelsList.map((mod) => {
+          return { label: mod.modelID!, value: mod.modelID! };
+        })
+      : [];
+
+  const runIDs = !!selectedModelID
+    ? modelRuns
+        .filter((run) => run.modelID === selectedModelID)
+        .map((run) => {
+          return { label: run.runID, value: run.runID };
+        })
+    : modelRuns.map((run) => {
+        return { label: run.runID, value: run.runID };
+      });
+  const runIDs1 =
+    runLogs.length > 0
+      ? runLogs.map((run) => {
+          return { label: run.runID, value: run.runID };
+        })
+      : [];
+
+  const onModelIDsRefresh = () => {
+    // dispatch(fetchAllModels());
+  };
+
+  const onModelIDSelection = (modID: string) => {
+    // dispatch(fetchModelRunsByModelID(modID));
+    dispatch(setSelectedModelID(modID));
+  };
+
+  const onRunIDSelection = (rID: string) => {
+    dispatch(setSelectedRunID(rID));
+  };
+
+  const onApplyFilters = () => {
+    if (selectedModelID !== modelID) {
+      dispatch(fetchModelRunsByModelID(modelID));
+      dispatch(setSelectedModelID(modelID));
+    }
+    if (selectedRunID !== runID) {
+      dispatch(setSelectedRunID(runID));
+    }
+  };
+
+  const onClearFilters = () => {
+    setModelID("");
+    setRunID("");
+    dispatch(clearRunFilters());
+  };
 
   const [page, setPage] = useState<number>(0);
   const numItemsPerPage =
-    ModelRuns && ModelRuns.length > 0
+    runLogs.length > 0
       ? [
           ...DataTablePagination.numItemsPerPage.filter(
-            (num) => num < ModelRuns.length
+            (num) => num < runLogs.length
           ),
-          ModelRuns.length,
+          runLogs.length,
         ]
       : DataTablePagination.numItemsPerPage;
   const [itemsPerPage, onItemsPerPageChange] = useState(numItemsPerPage[0]);
 
   const from = page * itemsPerPage;
-  const to = Math.min((page + 1) * itemsPerPage, ModelRuns.length);
+  const to = Math.min((page + 1) * itemsPerPage, runLogs.length);
+  const runFilters: RunFilterMenuProps = {
+    filters: [
+      {
+        label: "Model ID",
+        value: modelID,
+        onSelect: setModelID,
+        options: modelIDs,
+      },
+      {
+        label: "Run ID",
+        value: runID,
+        onSelect: setRunID,
+        options: runIDs,
+      },
+    ],
+    filtered: !!modelID || !!runID,
+    onClearFilters,
+    onApplyFilters,
+  };
+
   return (
     <ScrollView nestedScrollEnabled={true}>
       <SentixContainer>
         <DataTable>
-          {!!ModelRuns && ModelRuns.length > 0 ? (
-            ModelRuns.slice(from, to).map((run) => (
-              <Surface elevation={4} key={run.runID}>
-                <Card style={styles.dataCard}>
-                  <Card.Title title={run.nickName} titleVariant="titleLarge" />
-                  <Card.Content
-                    style={
-                      isLargeScreen
-                        ? [styles.largeScreenData, styles.dataCardContent]
-                        : [styles.mediumScreenData, styles.dataCardContent]
-                    }
-                  >
-                    <DataRow isSmallScreen={isSmallScreen}>
-                      <Surface elevation={2} style={styles.dataCell}>
-                        <TextInput
-                          label={<Text style={styles.textStyle}>Model ID</Text>}
-                          value={run.modelID}
-                          contentStyle={styles.dataCell}
-                        />
-                      </Surface>
-                      <Surface elevation={2} style={styles.dataCell}>
-                        <TextInput
-                          label={<Text style={styles.textStyle}>Run ID</Text>}
-                          value={run.runID}
-                          contentStyle={styles.dataCell}
-                        />
-                      </Surface>
-                      <Surface elevation={2} style={styles.dataCell}>
-                        <TextInput
-                          label={<Text style={styles.textStyle}>Status</Text>}
-                          value={run.execStatus}
-                          contentStyle={styles.dataCell}
-                        />
-                      </Surface>
-                      <Surface elevation={2} style={styles.dataCell}>
-                        <TextInput
-                          label={<Text style={styles.textStyle}>Duration</Text>}
-                          value={`${
-                            run.execDuration != 0 ? run.execDuration / 1000 : 0
-                          } s`}
-                          contentStyle={styles.dataCell}
-                        />
-                      </Surface>
-                    </DataRow>
-                    <DataRow isSmallScreen={isSmallScreen}>
-                      <Surface elevation={2} style={styles.dataCell}>
-                        <Text style={styles.textStyle}>Output Charts</Text>
-                        <PosterCarousel
-                          width={
-                            isLargeScreen
-                              ? styles.largeScreenPoster.width
-                              : isMediumScreen
-                              ? styles.mediumScreenPoster.width
-                              : styles.smallScreenPoster.width
-                          }
-                          outputPosters={run.outputCharts!}
-                          posterType={PosterType.CHART}
-                        />
-                      </Surface>
-                      <Surface elevation={2} style={styles.dataCell}>
-                        <Text style={styles.textStyle}>Output Images</Text>
-                        <PosterCarousel
-                          width={
-                            isLargeScreen
-                              ? styles.largeScreenPoster.width
-                              : isMediumScreen
-                              ? styles.mediumScreenPoster.width
-                              : styles.smallScreenPoster.width
-                          }
-                          outputPosters={run.outputImages!}
-                          posterType={PosterType.IMAGE}
-                        />
-                      </Surface>
-                    </DataRow>
-                  </Card.Content>
-                </Card>
-              </Surface>
-            ))
-          ) : (
-            <Text>No Runs Found!</Text>
-          )}
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={Math.ceil(ModelRuns.length / itemsPerPage)}
-            onPageChange={(page) => setPage(page)}
-            label={`${from + 1}-${to} of ${ModelRuns.length}`}
-            numberOfItemsPerPageList={numItemsPerPage}
-            numberOfItemsPerPage={itemsPerPage}
-            onItemsPerPageChange={onItemsPerPageChange}
-            showFastPaginationControls
-            selectPageDropdownLabel={"Rows per page"}
-          />
+          <>
+            <DataTable.Header>
+              <RunFilterMenu {...runFilters} />
+              <VizModalMenu />
+            </DataTable.Header>
+            {itemsPerPage > 2 && (
+              <DataTable.Pagination
+                page={page}
+                numberOfPages={Math.ceil(runLogs.length / itemsPerPage)}
+                onPageChange={(page) => setPage(page)}
+                label={`${from + 1}-${to} of ${runLogs.length}`}
+                numberOfItemsPerPageList={numItemsPerPage}
+                numberOfItemsPerPage={itemsPerPage}
+                onItemsPerPageChange={onItemsPerPageChange}
+                showFastPaginationControls
+                selectPageDropdownLabel={"Rows per page"}
+              />
+            )}
+            {runLogs.length > 0 ? (
+              runLogs.slice(from, to).map((run) => (
+                <Surface elevation={4} key={run.runID}>
+                  <Card style={styles.dataCard}>
+                    <Card.Title
+                      title={run.nickName}
+                      titleVariant="titleLarge"
+                    />
+                    <Card.Content
+                      style={
+                        isLargeScreen
+                          ? [styles.largeScreenData, styles.dataCardContent]
+                          : [styles.mediumScreenData, styles.dataCardContent]
+                      }
+                    >
+                      {isSmallScreen || Platform.OS !== "web" ? (
+                        <>
+                          <DataTable.Row>
+                            <Surface elevation={2} style={styles.dataCell}>
+                              <TextInput
+                                label={
+                                  <Text style={styles.textStyle}>Model ID</Text>
+                                }
+                                value={run.modelID}
+                                contentStyle={styles.dataCell}
+                              />
+                            </Surface>
+                          </DataTable.Row>
+                          <DataTable.Row>
+                            <Surface elevation={2} style={styles.dataCell}>
+                              <TextInput
+                                label={
+                                  <Text style={styles.textStyle}>Run ID</Text>
+                                }
+                                value={run.runID}
+                                contentStyle={styles.dataCell}
+                              />
+                            </Surface>
+                          </DataTable.Row>
+                          <DataTable.Row>
+                            <Surface elevation={2} style={styles.dataCell}>
+                              <TextInput
+                                label={
+                                  <Text style={styles.textStyle}>Status</Text>
+                                }
+                                value={run.execStatus}
+                                contentStyle={styles.dataCell}
+                              />
+                            </Surface>
+                          </DataTable.Row>
+                          <DataTable.Row>
+                            <Surface elevation={2} style={styles.dataCell}>
+                              <TextInput
+                                label={
+                                  <Text style={styles.textStyle}>Duration</Text>
+                                }
+                                value={`${
+                                  run.execDuration != 0
+                                    ? run.execDuration / 1000
+                                    : 0
+                                } s`}
+                                contentStyle={styles.dataCell}
+                              />
+                            </Surface>
+                          </DataTable.Row>
+                          <DataTable.Row>
+                            <Surface elevation={2} style={styles.dataCell}>
+                              <Text style={styles.textStyle}>
+                                Output Charts
+                              </Text>
+                              <PosterCarousel
+                                width={
+                                  isLargeScreen
+                                    ? styles.largeScreenPoster.width
+                                    : isMediumScreen
+                                    ? styles.mediumScreenPoster.width
+                                    : styles.smallScreenPoster.width
+                                }
+                                outputPosters={run.outputCharts!}
+                                posterType={PosterType.CHART}
+                              />
+                            </Surface>
+                          </DataTable.Row>
+                          <DataTable.Row>
+                            <Surface elevation={2} style={styles.dataCell}>
+                              <Text style={styles.textStyle}>
+                                Output Images
+                              </Text>
+                              <PosterCarousel
+                                width={
+                                  isLargeScreen
+                                    ? styles.largeScreenPoster.width
+                                    : isMediumScreen
+                                    ? styles.mediumScreenPoster.width
+                                    : styles.smallScreenPoster.width
+                                }
+                                outputPosters={run.outputImages!}
+                                posterType={PosterType.IMAGE}
+                              />
+                            </Surface>
+                          </DataTable.Row>
+                        </>
+                      ) : (
+                        <>
+                          <DataTable.Row>
+                            <Surface elevation={2} style={styles.dataCell}>
+                              <TextInput
+                                label={
+                                  <Text style={styles.textStyle}>Model ID</Text>
+                                }
+                                value={run.modelID}
+                                contentStyle={styles.dataCell}
+                              />
+                            </Surface>
+                            <Surface elevation={2} style={styles.dataCell}>
+                              <TextInput
+                                label={
+                                  <Text style={styles.textStyle}>Run ID</Text>
+                                }
+                                value={run.runID}
+                                contentStyle={styles.dataCell}
+                              />
+                            </Surface>
+                            <Surface elevation={2} style={styles.dataCell}>
+                              <TextInput
+                                label={
+                                  <Text style={styles.textStyle}>Status</Text>
+                                }
+                                value={run.execStatus}
+                                contentStyle={styles.dataCell}
+                              />
+                            </Surface>
+                            <Surface elevation={2} style={styles.dataCell}>
+                              <TextInput
+                                label={
+                                  <Text style={styles.textStyle}>Duration</Text>
+                                }
+                                value={`${
+                                  run.execDuration != 0
+                                    ? run.execDuration / 1000
+                                    : 0
+                                } s`}
+                                contentStyle={styles.dataCell}
+                              />
+                            </Surface>
+                          </DataTable.Row>
+                          <DataTable.Row>
+                            <Surface elevation={2} style={styles.dataCell}>
+                              <Text style={styles.textStyle}>
+                                Output Charts
+                              </Text>
+                              <PosterCarousel
+                                width={
+                                  isLargeScreen
+                                    ? styles.largeScreenPoster.width
+                                    : isMediumScreen
+                                    ? styles.mediumScreenPoster.width
+                                    : styles.smallScreenPoster.width
+                                }
+                                outputPosters={run.outputCharts!}
+                                posterType={PosterType.CHART}
+                              />
+                            </Surface>
+                            <Surface elevation={2} style={styles.dataCell}>
+                              <Text style={styles.textStyle}>
+                                Output Images
+                              </Text>
+                              <PosterCarousel
+                                width={
+                                  isLargeScreen
+                                    ? styles.largeScreenPoster.width
+                                    : isMediumScreen
+                                    ? styles.mediumScreenPoster.width
+                                    : styles.smallScreenPoster.width
+                                }
+                                outputPosters={run.outputImages!}
+                                posterType={PosterType.IMAGE}
+                              />
+                            </Surface>
+                          </DataTable.Row>
+                        </>
+                      )}
+                    </Card.Content>
+                  </Card>
+                </Surface>
+              ))
+            ) : (
+              <Text style={styles.textStyle}>No Runs Found!</Text>
+            )}
+            <DataTable.Pagination
+              page={page}
+              numberOfPages={Math.ceil(runLogs.length / itemsPerPage)}
+              onPageChange={(page) => setPage(page)}
+              label={`${from + 1}-${to} of ${runLogs.length}`}
+              numberOfItemsPerPageList={numItemsPerPage}
+              numberOfItemsPerPage={itemsPerPage}
+              onItemsPerPageChange={onItemsPerPageChange}
+              showFastPaginationControls
+              selectPageDropdownLabel={"Rows per page"}
+            ></DataTable.Pagination>
+          </>
         </DataTable>
       </SentixContainer>
     </ScrollView>
@@ -312,6 +699,14 @@ const styles = StyleSheet.create({
   smallScreenData: {
     flexDirection: "column",
   },
+  button: {
+    borderRadius: 20,
+    borderColor: theme.colors.tertiary,
+    borderWidth: 1,
+    elevation: 2,
+    borderStyle: "solid",
+    boxSizing: "border-box",
+  },
   textStyle: {
     color: theme.colors.text,
     fontSize: 20,
@@ -326,8 +721,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.secondaryContainer,
   },
   posterCarousel: {
-    width: Dimensions.get("screen").width * 0.5,
-    height: Dimensions.get("screen").height * 0.5,
+    height: Dimensions.get("screen").height * 0.4,
   },
   largeScreenPoster: {
     width: Dimensions.get("screen").width * 0.4,

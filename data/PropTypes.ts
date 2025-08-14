@@ -74,6 +74,7 @@ export type AppStateProps = {
   notification: NotificationStateProps;
   user: UserStateProps;
   model: ModelStateProps;
+  modelRunLog: ModelRunStateProps;
 };
 
 export type UserStateProps = {
@@ -84,6 +85,14 @@ export type UserStateProps = {
 export type ModelStateProps = {
   modelsList: ModelProps[];
   selectedModel: ModelProps | null;
+};
+
+export type ModelRunStateProps = {
+  modelRuns: ModelRunProps[];
+  filteredRuns: ModelRunProps[];
+  selectedRunID: string | undefined;
+  selectedModelID: string | undefined;
+  filtered: boolean;
 };
 
 export type NotificationStateProps = {
@@ -135,6 +144,7 @@ export type ActionProps = {
     UserProps[] &
     ModelProps &
     ModelProps[] &
+    ModelRunProps[] &
     NotificationActionProps &
     FiterProps &
     ErrorResponse &
@@ -162,7 +172,8 @@ export type ModelRunProps = {
 };
 
 export type RunSearchParams = {
-  runID: string;
+  runID?: string;
+  modelID?: string;
 };
 
 export type PosterCarouselProps = {
@@ -188,6 +199,7 @@ export type APIData = {
   user?: UserProps;
   model?: ModelProps;
   role?: string;
+  modelRuns?: ModelRunProps[];
 };
 
 export type ServerData = string | APIData;
@@ -269,5 +281,13 @@ export interface ModelAPI {
   fetchModelsByName: (payload: string) => Promise<ModelProps[] | ErrorResponse>;
   createNewModel: (payload: ModelProps) => Promise<ModelProps | ErrorResponse>;
   updateModelByID: (payload: ModelProps) => Promise<ModelProps | ErrorResponse>;
+  [key: string]: any;
+}
+
+export interface ModelRunAPI {
+  fetchAllModelRuns: () => Promise<ModelRunProps[] | ErrorResponse>;
+  fetchModelRunsByModelID: (
+    payload: string
+  ) => Promise<ModelRunProps[] | ErrorResponse>;
   [key: string]: any;
 }

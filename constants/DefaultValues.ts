@@ -33,8 +33,8 @@ export const modelsListPath = "/models/all";
 export const modelByIDPath = "/models/id";
 export const modelsByNamePath = "/models/name";
 export const modelsByUsernamePath = "/models/username";
-export const modelRuns = "models/runs/all";
-export const modelRunsByIDPath = "models/runs/id";
+export const modelRunsPath = "/models/runs/all";
+export const modelRunsByModelIDPath = "/models/runs/id";
 
 // Data Creation/Manipulation Paths
 export const userEditByIDPath = "/users/edit";
@@ -56,6 +56,10 @@ export enum ModelFilterParams {
   MODELID = "id",
   MODELNAME = "name",
   USERNAME = "username",
+}
+
+export enum ModelRunFilterParams {
+  MODELID = "modelID",
 }
 
 export enum NotificationTypes {
@@ -115,18 +119,18 @@ export enum PosterType {
 }
 
 export const DeviceSizes = {
-  xtraLarge: { maxWidth: 4000, minWidth: 2001 },
-  large: {
-    maxWidth: 2000,
-    minWidth: 1368,
+  bigScreen: { maxWidth: 4000, minWidth: 1824 },
+  largeScreen: {
+    maxWidth: 4000,
+    minWidth: 1225,
   },
-  medium: {
-    maxWidth: 1367,
-    minWidth: 1080,
+  tabletScreen: {
+    maxWidth: 1224,
+    minWidth: 800,
   },
-  small: {
-    maxWidth: 1079,
-    minWidth: 565,
+  phoneScreen: {
+    maxWidth: 799,
+    minWidth: 250,
   },
 };
 

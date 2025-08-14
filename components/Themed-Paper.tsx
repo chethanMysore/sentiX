@@ -245,7 +245,9 @@ export function Dropdown(props: DropdownProps) {
       options={options}
       value={value}
       onSelect={onSelect}
-      menuContentStyle={{ backgroundColor: theme.colors.plainContainer }}
+      menuContentStyle={{
+        backgroundColor: theme.colors.plainContainer,
+      }}
       menuUpIcon={<PaperTextInput.Icon icon="menu-up" pointerEvents="none" />}
       menuDownIcon={
         <PaperTextInput.Icon icon="menu-down" pointerEvents="none" />

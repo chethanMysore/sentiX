@@ -5,6 +5,8 @@ import {
   ErrorResponse,
   ModelAPI,
   ModelProps,
+  ModelRunAPI,
+  ModelRunProps,
   UserAPI,
   UserProps,
 } from "@/data/PropTypes";
@@ -12,14 +14,18 @@ import { all, call, put, takeLatest } from "redux-saga/effects";
 import { handleError, hideLoader } from "../actions/notification";
 import {
   CREATE_MODEL,
+  FETCH_ALL_MODEL_RUNS,
   FETCH_ALL_MODELS,
   FETCH_ALL_USERS,
+  FETCH_MODEL_RUNS_BY_FILTER,
   FETCH_MODELS_BY_FILTER,
   FETCH_USERS_BY_FILTER,
   ON_CREATE_MODEL_SUCCESS,
+  ON_FETCH_ALL_MODEL_RUNS_SUCCESS,
   ON_FETCH_ALL_MODELS_SUCCESS,
   ON_FETCH_ALL_USERS_SUCCESS,
   ON_FETCH_MODEL_DETAILS_SUCCESS,
+  ON_FETCH_MODEL_RUNS_BY_FILTER_SUCCESS,
   ON_FETCH_MODELS_BY_FILTER_SUCCESS,
   ON_FETCH_USER_DETAILS_SUCCESS,
   ON_FETCH_USERS_BY_FILTER_SUCCESS,
@@ -29,19 +35,22 @@ import {
   UPDATE_USER_DETAILS,
 } from "@/constants/ActionTypes";
 import { modelApi, userApi } from "../api";
-import { ModelFilterParams, UserFilterParams } from "@/constants/DefaultValues";
+import {
+  ModelFilterParams,
+  ModelRunFilterParams,
+  UserFilterParams,
+} from "@/constants/DefaultValues";
+import { modelRunApi } from "../api/run";
 
 const execAndLinkSideEffects = function* (
-  api: UserAPI | ModelAPI,
+  api: UserAPI | ModelAPI | ModelRunAPI,
   apiFnName: string,
   fnPayload: ActionPayloadProps,
   successActionType: string
 ) {
   try {
-    const res: UserProps | ModelProps | ErrorResponse = yield call(
-      api[apiFnName],
-      fnPayload
-    );
+    const res: UserProps | ModelProps | ModelRunProps | ErrorResponse =
+      yield call(api[apiFnName], fnPayload);
     if (!!res && (<ErrorResponse>res).isError) {
       const err = <ErrorResponse>res;
       err.source = `execAndLinkSideEffects -> ${typeof api}.${apiFnName}`;
@@ -50,7 +59,7 @@ const execAndLinkSideEffects = function* (
       yield all([
         put({
           type: successActionType,
-          payload: res as UserProps | ModelProps,
+          payload: res as UserProps | ModelProps | ModelRunProps,
         }),
         put(hideLoader()),
       ]);
@@ -159,4 +168,24 @@ export const apiSagas = function* () {
       ON_UPDATE_MODEL_DETAILS_SUCCESS
     )
   );
+  yield takeLatest(FETCH_ALL_MODEL_RUNS, (action: ActionProps) =>
+    execAndLinkSideEffects(
+      modelRunApi,
+      "fetchAllModelRuns",
+      null,
+      ON_FETCH_ALL_MODEL_RUNS_SUCCESS
+    )
+  );
+  yield takeLatest(FETCH_MODEL_RUNS_BY_FILTER, (action: ActionProps) => {
+    switch (action.payload?.paramName) {
+      case ModelRunFilterParams.MODELID: {
+        return execAndLinkSideEffects(
+          modelRunApi,
+          "fetchModelRunsByModelID",
+          action.payload?.paramValue!,
+          ON_FETCH_MODEL_RUNS_BY_FILTER_SUCCESS
+        );
+      }
+    }
+  });
 };

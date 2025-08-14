@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Modal, Alert } from "react-native";
+import { StyleSheet, Modal, Alert, ScrollView } from "react-native";
 
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
@@ -8,7 +8,7 @@ import { AppStateProps, ModelStateProps } from "@/data/PropTypes";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllModels } from "@/src/actions/model";
 import { SentixContainer, SentixForm } from "@/components/Themed-Paper";
-import { ScrollView } from "react-native-gesture-handler";
+// import { ScrollView } from "react-native-gesture-handler";
 // import { DataVizTableau } from "@/components/DataVizTableau";
 import { Surface } from "react-native-paper";
 

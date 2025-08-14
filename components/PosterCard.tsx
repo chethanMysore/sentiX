@@ -27,7 +27,12 @@ export const PosterCard = (props: any) => {
               //     ? [styles.posterImage, styles.largeScreenImage]
               //     : [styles.posterImage, styles.mediumScreenImage]
               // }
-              style={styles.posterImage}
+              style={[
+                styles.posterImage,
+                {
+                  minHeight: Platform.OS !== "web" || isLargeScreen ? 300 : 400,
+                },
+              ]}
             />
           </Card.Content>
         </Card>
@@ -64,7 +69,7 @@ const styles = StyleSheet.create({
   },
   posterImage: {
     minWidth: "100%",
-    minHeight: 300,
+    // minHeight: 400,
     alignSelf: "center",
     resizeMode: "contain",
   },

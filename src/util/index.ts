@@ -22,20 +22,23 @@ export const getCountryCodeFromName = (name: string) => {
 
 export const isXtraLargeDevice = () =>
   useMediaQuery({
-    minDeviceWidth: DeviceSizes.xtraLarge.minWidth,
+    minDeviceWidth: DeviceSizes.bigScreen.minWidth,
+    // maxDeviceWidth: DeviceSizes.bigScreen.maxWidth,
   });
 
 export const isLargeDevice = () =>
   useMediaQuery({
-    minDeviceWidth: DeviceSizes.large.minWidth,
+    minDeviceWidth: DeviceSizes.largeScreen.minWidth,
+    maxDeviceWidth: DeviceSizes.largeScreen.maxWidth,
   });
 
 export const isMediumDevice = () =>
   useMediaQuery({
-    minDeviceWidth: DeviceSizes.medium.minWidth,
+    minDeviceWidth: DeviceSizes.tabletScreen.minWidth,
+    maxDeviceWidth: DeviceSizes.tabletScreen.maxWidth,
   });
 
 export const isSmallDevice = () =>
   useMediaQuery({
-    minDeviceWidth: DeviceSizes.small.minWidth,
+    maxDeviceWidth: DeviceSizes.phoneScreen.maxWidth,
   });
