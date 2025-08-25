@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Modal, Alert, ScrollView } from "react-native";
+import { StyleSheet, Modal, Alert, ScrollView, Platform } from "react-native";
 
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
@@ -10,12 +10,16 @@ import { fetchAllModels } from "@/src/actions/model";
 import { SentixContainer, SentixForm } from "@/components/Themed-Paper";
 // import { ScrollView } from "react-native-gesture-handler";
 // import { DataVizTableau } from "@/components/DataVizTableau";
-import { Surface } from "react-native-paper";
+import { DataTable, Surface } from "react-native-paper";
+import { ModelStats } from "@/components/ModelStats";
+import { isLargeDevice, isSmallDevice } from "@/src/util";
+import { RunStats } from "@/components/RunStats";
 
 export default function DashboardScreen() {
   const modelState = useSelector((state: AppStateProps) => state.model);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
+  const isSmallScreen = isSmallDevice();
   useEffect(() => {
     if (modelState.modelsList.length == 0) {
       dispatch(fetchAllModels());
@@ -31,7 +35,42 @@ export default function DashboardScreen() {
             lightColor="#eee"
             darkColor="rgba(255,255,255,0.1)"
           />
-          <ModelList modelsList={modelState.modelsList} selectedModel={null} />
+
+          {isSmallScreen || Platform.OS !== "web" ? (
+            <DataTable>
+              <ModelList
+                modelsList={modelState.modelsList}
+                selectedModel={null}
+              />
+              <RunStats />
+              <ModelStats />
+            </DataTable>
+          ) : (
+            <DataTable>
+              <DataTable.Row>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "row",
+                  }}
+                >
+                  <ModelList
+                    modelsList={modelState.modelsList}
+                    selectedModel={null}
+                  />
+                </View>
+                <View style={{ flex: 1, flexDirection: "column" }}>
+                  <RunStats />
+                </View>
+              </DataTable.Row>
+              <DataTable.Row>
+                <View style={{ flex: 1, flexDirection: "column" }}>
+                  <ModelStats />
+                </View>
+              </DataTable.Row>
+            </DataTable>
+          )}
+
           {/* <DataVizTableau /> */}
         </SentixForm>
       </SentixContainer>

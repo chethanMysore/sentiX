@@ -118,6 +118,25 @@ export enum PosterType {
   IMAGE = "image",
 }
 
+export const ModelRunExecStatusColor: {
+  Queued: string;
+  Started: string;
+  Running: string;
+  Paused: string;
+  Stopped: string;
+  Completed: string;
+  Crashed: string;
+  [key: string]: any;
+} = {
+  Queued: "#97dbe2",
+  Started: "#c68bff",
+  Running: "#8910ff",
+  Paused: "#3f007d",
+  Stopped: "#7d003e",
+  Completed: "#298b27",
+  Crashed: "#ce3500",
+};
+
 export const DeviceSizes = {
   bigScreen: { maxWidth: 4000, minWidth: 1824 },
   largeScreen: {

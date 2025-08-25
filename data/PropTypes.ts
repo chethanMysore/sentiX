@@ -152,11 +152,11 @@ export type ActionProps = {
 };
 
 export type ModelChartProps = {
-  xCoords: number[];
-  yCoords: number[];
-  xLabel: string;
-  yLabel: string;
-  chartLabel: string;
+  xCoords: number[] | (string | undefined)[];
+  yCoords: number[] | (string | undefined)[];
+  xLabel?: string;
+  yLabel?: string;
+  chartLabel?: string;
 };
 
 export type ModelRunProps = {

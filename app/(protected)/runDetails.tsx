@@ -15,7 +15,7 @@ import {
   PosterCarouselProps,
   RunSearchParams,
 } from "@/data/PropTypes";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Children, RefObject, useEffect, useRef, useState } from "react";
 import {
   Dimensions,
@@ -262,12 +262,17 @@ export default function RunDetailsPage() {
   const isLargeScreen = isLargeDevice();
   const isMediumScreen = isMediumDevice();
   const isSmallScreen = isSmallDevice();
-  // const { runID, modelID } = useLocalSearchParams<RunSearchParams>();
+
+  const router = useRouter();
 
   const model = useSelector((state: AppStateProps) => state.model);
   const modelRunLog = useSelector((state: AppStateProps) => state.modelRunLog);
 
-  const [modelID, setModelID] = useState("");
+  const { modelID } = useLocalSearchParams<RunSearchParams>();
+
+  const [filteredModelID, setFilteredModelID] = !!modelID
+    ? useState(modelID)
+    : useState("");
   const [runID, setRunID] = useState("");
 
   const dispatch = useDispatch();
@@ -275,6 +280,10 @@ export default function RunDetailsPage() {
   useEffect(() => {
     if (modelRunLog.modelRuns.length == 0) {
       dispatch(fetchAllModelRuns());
+    }
+    if (!!modelID && !filtered) {
+      dispatch(fetchModelRunsByModelID(modelID));
+      dispatch(setSelectedModelID(modelID));
     }
   });
 
@@ -321,9 +330,10 @@ export default function RunDetailsPage() {
   };
 
   const onApplyFilters = () => {
-    if (selectedModelID !== modelID) {
-      dispatch(fetchModelRunsByModelID(modelID));
-      dispatch(setSelectedModelID(modelID));
+    router.setParams({ modelID: filteredModelID });
+    if (selectedModelID !== filteredModelID) {
+      dispatch(fetchModelRunsByModelID(filteredModelID));
+      dispatch(setSelectedModelID(filteredModelID));
     }
     if (selectedRunID !== runID) {
       dispatch(setSelectedRunID(runID));
@@ -331,7 +341,8 @@ export default function RunDetailsPage() {
   };
 
   const onClearFilters = () => {
-    setModelID("");
+    router.setParams({ modelID: undefined });
+    setFilteredModelID("");
     setRunID("");
     dispatch(clearRunFilters());
   };
@@ -354,8 +365,8 @@ export default function RunDetailsPage() {
     filters: [
       {
         label: "Model ID",
-        value: modelID,
-        onSelect: setModelID,
+        value: filteredModelID,
+        onSelect: setFilteredModelID,
         options: modelIDs,
       },
       {
@@ -365,7 +376,7 @@ export default function RunDetailsPage() {
         options: runIDs,
       },
     ],
-    filtered: !!modelID || !!runID,
+    filtered: !!filteredModelID || !!runID,
     onClearFilters,
     onApplyFilters,
   };
@@ -537,40 +548,68 @@ export default function RunDetailsPage() {
                                 contentStyle={styles.dataCell}
                               />
                             </Surface>
+                            {(!run.outputCharts ||
+                              run.outputCharts?.length == 0) && (
+                              <Surface elevation={2} style={styles.dataCell}>
+                                <Text style={styles.textStyle}>
+                                  Output Charts
+                                </Text>
+                                <View style={styles.posterCarouselView}>
+                                  <Text>No Charts Yet!</Text>
+                                </View>
+                              </Surface>
+                            )}
+                            {(!run.outputImages ||
+                              run.outputImages?.length == 0) && (
+                              <Surface elevation={2} style={styles.dataCell}>
+                                <Text style={styles.textStyle}>
+                                  Output Images
+                                </Text>
+                                <View style={styles.posterCarouselView}>
+                                  <Text>No Images Yet!</Text>
+                                </View>
+                              </Surface>
+                            )}
                           </DataTable.Row>
                           <DataTable.Row>
-                            <Surface elevation={2} style={styles.dataCell}>
-                              <Text style={styles.textStyle}>
-                                Output Charts
-                              </Text>
-                              <PosterCarousel
-                                width={
-                                  isLargeScreen
-                                    ? styles.largeScreenPoster.width
-                                    : isMediumScreen
-                                    ? styles.mediumScreenPoster.width
-                                    : styles.smallScreenPoster.width
-                                }
-                                outputPosters={run.outputCharts!}
-                                posterType={PosterType.CHART}
-                              />
-                            </Surface>
-                            <Surface elevation={2} style={styles.dataCell}>
-                              <Text style={styles.textStyle}>
-                                Output Images
-                              </Text>
-                              <PosterCarousel
-                                width={
-                                  isLargeScreen
-                                    ? styles.largeScreenPoster.width
-                                    : isMediumScreen
-                                    ? styles.mediumScreenPoster.width
-                                    : styles.smallScreenPoster.width
-                                }
-                                outputPosters={run.outputImages!}
-                                posterType={PosterType.IMAGE}
-                              />
-                            </Surface>
+                            {!!run.outputCharts &&
+                              run.outputCharts.length > 0 && (
+                                <Surface elevation={2} style={styles.dataCell}>
+                                  <Text style={styles.textStyle}>
+                                    Output Charts
+                                  </Text>
+                                  <PosterCarousel
+                                    width={
+                                      isLargeScreen
+                                        ? styles.largeScreenPoster.width
+                                        : isMediumScreen
+                                        ? styles.mediumScreenPoster.width
+                                        : styles.smallScreenPoster.width
+                                    }
+                                    outputPosters={run.outputCharts!}
+                                    posterType={PosterType.CHART}
+                                  />
+                                </Surface>
+                              )}
+                            {!!run.outputImages &&
+                              run.outputImages.length > 0 && (
+                                <Surface elevation={2} style={styles.dataCell}>
+                                  <Text style={styles.textStyle}>
+                                    Output Images
+                                  </Text>
+                                  <PosterCarousel
+                                    width={
+                                      isLargeScreen
+                                        ? styles.largeScreenPoster.width
+                                        : isMediumScreen
+                                        ? styles.mediumScreenPoster.width
+                                        : styles.smallScreenPoster.width
+                                    }
+                                    outputPosters={run.outputImages!}
+                                    posterType={PosterType.IMAGE}
+                                  />
+                                </Surface>
+                              )}
                           </DataTable.Row>
                         </>
                       )}

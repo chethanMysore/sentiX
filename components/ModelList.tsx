@@ -23,11 +23,12 @@ import { getLocaleDateTime } from "@/src/util/dateTimeUtil";
 import { DataTablePagination } from "@/constants/DefaultValues";
 import { isLargeDevice, isMediumDevice } from "@/src/util";
 import { theme } from "@/constants/AppTheme";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { ModelRuns } from "@/data/sample-data";
 
 export const ModelList = (props: ModelStateProps) => {
+  const router = useRouter();
   const isLargeScreen = isLargeDevice();
   const isMediumScreen = isMediumDevice();
   const [modalVisible, setModalVisible] = useState(false);
@@ -71,7 +72,9 @@ export const ModelList = (props: ModelStateProps) => {
           </TouchableOpacity>
         </Modal>
       </Portal>
-      <DataTable>
+      <DataTable
+        style={{ padding: "3%", backgroundColor: theme.colors.plainContainer }}
+      >
         {props.modelsList.slice(from, to).map((item) => (
           // <DataTable.Row key={item.modelID}>
           <Surface elevation={4} key={item.modelID}>
@@ -112,24 +115,31 @@ export const ModelList = (props: ModelStateProps) => {
               </Card.Content>
               <Card.Actions style={{ alignSelf: "center" }}>
                 <Button onPress={() => handleShowDetails(item)}>Details</Button>
-                <Link
+                {/* <Link
                   href={{
                     pathname: "/runDetails",
                     params: { modelID: item.modelID },
                   }}
                   asChild
+                > */}
+                <Pressable
+                  onPress={() => {
+                    router.push({
+                      pathname: `/(protected)/runDetails`,
+                      params: { modelID: item.modelID },
+                    });
+                  }}
                 >
-                  <Pressable>
-                    {({ pressed }) => (
-                      <MaterialIcons
-                        name="query-stats"
-                        size={25}
-                        color={theme.colors.primary}
-                        style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                      />
-                    )}
-                  </Pressable>
-                </Link>
+                  {({ pressed }) => (
+                    <MaterialIcons
+                      name="query-stats"
+                      size={25}
+                      color={theme.colors.primary}
+                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                    />
+                  )}
+                </Pressable>
+                {/* </Link> */}
               </Card.Actions>
             </Card>
           </Surface>

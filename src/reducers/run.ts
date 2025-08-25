@@ -60,7 +60,7 @@ export const modelRunReducer = (
         filteredRuns: [],
         selectedRunID: "",
         selectedModelID: "",
-        filtered: false,
+        // filtered: false,
       });
     }
     default:

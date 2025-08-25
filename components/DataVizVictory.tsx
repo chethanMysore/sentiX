@@ -31,7 +31,7 @@ const ChartViz = (props: ModelChartProps) => {
   const chartDataset = props.xCoords.map((x, i) => ({
     x: x,
     y: props.yCoords[i],
-    label: props.yCoords[i].toFixed(3).toString(),
+    label: parseFloat(props.yCoords[i]!.toString()).toFixed(3).toString(),
   }));
   const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
   return (
@@ -118,7 +118,7 @@ export const DataVizVictory = (props: ModelChartProps) => {
   const isLargeScreen = isLargeDevice();
   const isMediumScreen = isMediumDevice();
   const chartDataset = props.xCoords.map((x, i) => ({
-    xCoords: x.toString(),
+    xCoords: x!.toString(),
     yCoords: props.yCoords[i],
   }));
   return (
